@@ -63,6 +63,8 @@ services:
       - MYSQL_DATABASE=${SQL_DATABASE}
     ports:
       - 3306:3306
+    networks:
+      - mynetwork
 
   db_leave:
     container_name: db_leave
@@ -79,6 +81,8 @@ services:
       - MYSQL_DATABASE=${SQL_DATABASE}
     ports:
       - 3307:3307
+    networks:
+      - mynetwork
 
   service_employee:
     container_name: service_employee
@@ -96,6 +100,8 @@ services:
       - db_employee
     links:
       - db_employee
+    networks:
+      - mynetwork
 
   service_leave:
     container_name: service_leave
@@ -113,6 +119,8 @@ services:
       - db_leave
     links:
       - db_leave
+    networks:
+      - mynetwork
 
   service_reward:
     container_name: service_reward
@@ -130,6 +138,8 @@ services:
       - db_employee
     links:
       - db_employee
+    networks:
+      - mynetwork
 
 
   frontend:
@@ -144,6 +154,8 @@ services:
       - ./.env.dev
     ports:
       - 8008:8008
+    networks:
+      - mynetwork
   
   phpmyadmin-employee:
     image: phpmyadmin/phpmyadmin
@@ -155,6 +167,8 @@ services:
       - "8080:80"
     depends_on:
       - db_employee
+    networks:
+      - mynetwork
 
   phpmyadmin-leave:
     image: phpmyadmin/phpmyadmin
@@ -166,6 +180,8 @@ services:
       - "8081:80"
     depends_on:
       - db_leave
+    networks:
+      - mynetwork
 networks:
   default:
     external: true
