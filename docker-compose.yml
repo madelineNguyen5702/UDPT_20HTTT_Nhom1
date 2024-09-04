@@ -48,55 +48,13 @@ services:
       - kong-database
       - kong-migrations
 
-
-  # employee_service:
-  #   image: doanudpt-employee_service
-  #   build:
-  #     context: ./Employee  
-  #   ports:
-  #     - "8004:8004"
-  #   networks:
-  #     - mynetwork
-  #   command: gunicorn --bind 0.0.0.0:8004 Employee.wsgi:application
-
-
-
-  # leave_service:
-  #   build:
-  #     context: ./Leave  
-  #   ports:
-  #     - "8005:8005"
-  #   command: gunicorn --bind 0.0.0.0:8005 Leave.wsgi:application
-
-
-  # reward_service:
-  #   build:
-  #     context: ./Reward  
-  #   ports:
-  #     - "8006:8006"
-  #   command: gunicorn --bind 0.0.0.0:8006 Reward.wsgi:application
-
-  # website:
-  #   image: doanudpt-website_service
-  #   build:
-  #     context: ./Website  # Thay đổi nếu thư mục khác
-  #   ports:
-  #     - "8009:8009"
-  #   networks:
-  #     - mynetwork
-  #   command: gunicorn --bind 0.0.0.0:8009 Website.wsgi:application
-  #   depends_on:
-  #     - employee_service
-  #     - leave_service
-  #     - reward_service
-  
-  db:
-    container_name: mysql-container
+  db_employee:
+    container_name: mysql-employee
     image: mysql:8.0
     restart: always
     command: mysqld --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./mysqlemployee:/var/lib/mysql
 
     environment:
       - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
@@ -106,22 +64,21 @@ services:
     ports:
       - 3306:3306
 
-  web:
-    container_name: django-web
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8007
+  db_leave:
+    container_name: mysql-leave
+    image: mysql:8.0
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./app/:/usr/src/app/
-    env_file:
-      - ./.env.dev
+      - ./mysqlleave:/var/lib/mysql
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
+      - MYSQL_USER=${SQL_USER}
+      - MYSQL_PASSWORD=${SQL_PASSWORD}
+      - MYSQL_DATABASE=${SQL_DATABASE}
     ports:
-      - 8007:8007
-    depends_on:
-      - db
-    links:
-      - db
+      - 3307:3307
 
   service_employee:
     container_name: service_employee
@@ -136,9 +93,43 @@ services:
     ports:
       - 8004:8004
     depends_on:
-      - db
+      - db_employee
     links:
-      - db
+      - db_employee
+
+  service_leave:
+    container_name: service_leave
+    build:
+      context: ./serviceLeave
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8005
+    volumes:
+      - ./serviceLeave/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    ports:
+      - 8005:8005
+    depends_on:
+      - db_leave
+    links:
+      - db_leave
+
+  service_reward:
+    container_name: service_reward
+    build:
+      context: ./serviceReward
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8006
+    volumes:
+      - ./serviceReward/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    ports:
+      - 8006:8006
+    depends_on:
+      - db_employee
+    links:
+      - db_employee
 
 
   frontend:
@@ -158,17 +149,27 @@ services:
     links:
       - db
   
-  phpmyadmin:
+  phpmyadmin-employee:
     image: phpmyadmin/phpmyadmin
-    container_name: myadmin
+    container_name: myadmin-employee
     environment:
-      PMA_HOST: db
+      PMA_HOST: db_employee
       MYSQL_ROOT_PASSWORD: ${SQL_ROOT_PASSWORD}
     ports:
       - "8080:80"
     depends_on:
-      - db
+      - db_employee
 
+  phpmyadmin-leave:
+    image: phpmyadmin/phpmyadmin
+    container_name: myadmin-leave
+    environment:
+      PMA_HOST: db_leave
+      MYSQL_ROOT_PASSWORD: ${SQL_ROOT_PASSWORD}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db_leave
 networks:
   default:
     external: true
