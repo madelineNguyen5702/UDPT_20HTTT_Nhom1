@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check Name</title>
+  </head>
+  <body>
+    <h1>Check Nhân viên</h1>
+    <form id="checkForm" method="POST">
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Enter name"
+        required
+      />
+      <button type="submit">Check</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+      document.getElementById("checkForm").onsubmit = async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+
+        try {
+          // Gửi request đến web2
+          const response = await fetch("http://localhost:8004/api/check/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: name }),
+          });
+
+          // Kiểm tra nếu phản hồi là OK
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById("result").textContent = data.message;
+
+            // Điều hướng đến trang /home nếu tên tồn tại
+            if (data.message.includes("có sẵn")) {
+              window.location.href = "/home";
+            }
+          } else {
+            throw new Error("Network response was not ok.");
+          }
+        } catch (error) {
+          console.error("There was a problem with the fetch operation:", error);
+          document.getElementById("result").textContent =
+            "Có lỗi xảy ra khi kiểm tra tên.";
+        }
+      };
+    </script>
+  </body>
+</html>

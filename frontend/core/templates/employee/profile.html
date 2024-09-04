@@ -1,0 +1,70 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin nhân viên</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body class="info-body" id="info-body">
+    <!-- Thông tin nhân viên -->
+    <h1>Thông tin nhân viên</h1>
+    <div class="info-container">
+      <div class="info-group">
+        <label>Họ và tên:</label>
+        <span>Phan Thanh Thúy</span>
+      </div>
+      <div class="info-group">
+        <label>Giới tính:</label>
+        <span>Nữ</span>
+      </div>
+      <div class="info-group">
+        <label>Ngày sinh:</label>
+        <span>15/12/2002</span>
+      </div>
+      <div class="info-group">
+        <label>CCCD:</label>
+        <span>070302124737</span>
+      </div>
+      <div class="info-group">
+        <label>Số điện thoại:</label>
+        <span>039 123 4567</span>
+      </div>
+      <div class="info-group">
+        <label>Email:</label>
+        <span>ptt@npt.com</span>
+      </div>
+      <div class="info-group">
+        <label>MST:</label>
+        <span>1024542455</span>
+      </div>
+      <div class="info-group">
+        <label>Địa chỉ:</label>
+        <span>974 Nguyễn Trãi, phường 1, quận 5, TPHCM</span>
+      </div>
+      <div class="info-group">
+        <label>STK:</label>
+        <span>1037458887 Vietcombank</span>
+      </div>
+    </div>
+  </body>
+</html>

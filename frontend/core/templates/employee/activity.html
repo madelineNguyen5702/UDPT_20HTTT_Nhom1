@@ -1,0 +1,65 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hoạt Động</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body class="activity-body" id="activity-body">
+    <h1>Hoạt Động</h1>
+    <div class="activity-container">
+      <div class="activity-block">
+        <div class="activity-date">Ngày: 8/8/2024</div>
+        <div class="activity-type">CHẠY BỘ</div>
+        <div class="activity-details">
+          <div class="activity-time">17h15</div>
+          <div class="activity-button">
+            <button>Xem chi tiết</button>
+          </div>
+          <div class="activity-stats">
+            Quãng đường: 3.14 km<br />
+            Thời gian: 40p<br />
+            Vận tốc trung bình: 20km/h<br />
+            Calories: 200kcal
+          </div>
+        </div>
+      </div>
+
+      <div class="activity-block">
+        <div class="activity-date">Ngày: 7/8/2024</div>
+        <div class="activity-type">CHẠY BỘ</div>
+        <div class="activity-details">
+          <div class="activity-time">7h15</div>
+          <div class="activity-button">
+            <button>Xem chi tiết</button>
+          </div>
+          <div class="activity-stats">
+            Quãng đường: 2.51 km<br />
+            Thời gian: 27p<br />
+            Vận tốc trung bình: 20km/h<br />
+            Calories: 197kcal
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

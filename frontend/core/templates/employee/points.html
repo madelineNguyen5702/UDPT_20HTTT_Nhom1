@@ -1,0 +1,63 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin điểm</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body class="points-body" id="points-body">
+    <h1>Thông tin điểm</h1>
+    <div class="points-container">
+      <div class="points-info">
+        <div class="info-group">
+          <label>Số điểm hiện tại:</label>
+          <span>1.000đ</span>
+        </div>
+        <div class="info-group">
+          <label>Voucher đã đổi:</label>
+          <span>3</span>
+          <button class="view-voucher" id="view-voucher">Xem voucher</button>
+        </div>
+      </div>
+
+      <div class="voucher-list">
+        <div class="voucher-item">
+          <span>Giảm 20k cho đơn từ 50k Momo</span>
+          <button class="redeem-button">Đổi</button>
+        </div>
+        <div class="voucher-item">
+          <span>Giảm 20k cho đơn từ 50k Momo</span>
+          <button class="redeem-button">Đổi</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+      // Xử lý sự kiện click cho nút Gửi yêu cầu
+      document
+        .getElementById("view-voucher")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/voucher";
+        });
+  </script>
+</html>

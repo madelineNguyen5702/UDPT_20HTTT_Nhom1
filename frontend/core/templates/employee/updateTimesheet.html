@@ -1,0 +1,97 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YÊU CẦU LÀM VIỆC TỪ XA</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body>
+    <div class="edit-timesheet-group">
+      <!-- Sidebar -->
+      <div class="msb" id="msb">
+        <div class="side-menu-leave-container">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-envelope"></i> Yêu cầu
+                <i class="fa-solid fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="/employee/leave"
+                    ><i class="fa fa-calendar"></i> Nghỉ phép</a
+                  >
+                </li>
+                <li>
+                  <a href="/employee/wfh"><i class="fa fa-laptop"></i> WFH </a>
+                </li>
+                <li>
+                  <a href="/employee/timesheet/update"
+                    ><i class="fa fa-clock"></i><b> Timesheet </b></a
+                  >
+                </li>
+                <li>
+                  <a href="/employee/statusRequest"
+                    ><i class="fa fa-info-circle"></i> Tình trạng</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <main class="update-timesheet-content">
+        <form>
+          <h1>Cập nhật timesheet</h1>
+          <div class="form-group1">
+            <label for="from-date">Ngày:</label>
+            <input type="date" id="from-date" name="from-date" />
+          </div>
+          <div class="form-group1">
+            <label for="checkin-hour">Thời gian check-in:</label>
+            <input type="hour" id="checkin-hour" name="checkin-hour" />
+          </div>
+          <div class="form-group1">
+            <label for="checkout-hour">Thời gian check-out:</label>
+            <input type="hour" id="checkout-hour" name="checkout-hour" />
+          </div>
+        </form>
+        <button type="submit" id="submit-timesheet">Gửi</button>
+      </main>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function () {
+      // Initially show the dropdown menu
+      $(".dropdown-menu").show();
+
+      // Toggle visibility on caret down click
+      $(".dropdown-toggle").click(function (e) {
+        e.preventDefault();
+        $(this).next(".dropdown-menu").slideToggle();
+      });
+    });
+  </script>
+</html>

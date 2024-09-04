@@ -1,0 +1,47 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin voucher</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body class="voucher-body" id="voucher-body">
+    <div class="voucher-content">
+      <h1 class="points-title">Voucher</h1>
+      <div class="voucher-container">
+        <div class="voucher-item">
+          <span class="voucher-text">Giảm 20k cho đơn từ 50k Momo</span>
+          <button class="btn btn-primary" id="use-button">Dùng</button>
+        </div>
+        <div class="voucher-item">
+          <span class="voucher-text">Giảm 10k cho đơn từ 50k Momo</span>
+          <button class="btn btn-primary" id="use-button">Dùng</button>
+        </div>
+        <div class="voucher-item">
+          <span class="voucher-text">Giảm 10k cho đơn từ 50k Momo</span>
+          <button class="btn btn-primary" id="use-button">Dùng</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

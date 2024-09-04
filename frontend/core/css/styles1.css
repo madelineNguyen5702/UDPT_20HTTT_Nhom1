@@ -1,0 +1,210 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 10;
+    padding-top: 5px; /* Khoảng cách trên cho header */
+    background-color: #f5f5f5; /* Màu nền của trang */
+}
+
+header {
+    display: flex;
+    justify-content: space-between; /* Căn chỉnh các phần tử dọc theo chiều ngang */
+    align-items: center; /* Căn chỉnh các phần tử dọc theo chiều dọc */
+    padding: 0 20px; /* Khoảng cách xung quanh nội dung header */
+    background-color: #f8f9fa; /* Màu nền của header */
+    border-bottom: 1px solid #ddd; /* Đường viền dưới của header */
+}
+
+.header-left .navbar-brand {
+    font-size: 24px; /* Kích thước chữ của tên web */
+    font-weight: bold; /* Đậm cho tên web */
+    text-decoration: none; /* Xóa gạch chân nếu có */
+    color: #333; /* Màu chữ của tên web */
+}
+
+.header-center {
+    flex: 2; /* Chiếm không gian lớn hơn để căn giữa nội dung */
+    text-align: center; /* Căn giữa nội dung bên trong */
+}
+
+.header-center .nav-link {
+    text-decoration: none; /* Xóa gạch chân của liên kết */
+    color: #007bff; /* Màu chữ của liên kết */
+    font-weight: bold; /* Đậm cho liên kết */
+}
+
+.header-center .nav-link.active {
+    font-weight: bold; /* Đánh dấu liên kết đang hoạt động */
+}
+
+.header-right {
+    text-align: right; /* Căn phải nội dung bên trong */
+    display: flex; /* Hiển thị các phần tử con theo hàng ngang */
+    align-items: center; /* Căn giữa các phần tử dọc theo chiều dọc */
+}
+
+.header-right .username {
+    margin-right: 25px; /* Khoảng cách giữa tên người dùng và nút Đăng xuất */
+    font-weight: bold; /* Đậm cho tên người dùng */
+}
+
+.header-right .logout-btn {
+    /* text-decoration: none; Xóa gạch chân của nút */
+    color: #007bff; /* Màu chữ của nút */
+    font-weight: bold; /* Đậm cho nút */
+    padding: 5px 10px; /* Khoảng cách bên trong nút */
+    /* border: 1px solid #007bff; Đường viền của nút */
+    border-radius: 5px; /* Bo góc nút */
+}
+
+.header-right .logout-btn:hover {
+    background-color: #007bff; /* Màu nền khi di chuột qua */
+    color: white; /* Màu chữ khi di chuột qua */
+}
+
+.btn-primary {
+    font-size: 0.75rem; /* Kích thước chữ */
+    width: 100%; /* Chiều rộng 100% của phần tử chứa */
+    max-width: 500px; /* Chiều rộng tối đa */
+    margin: 0.5rem 0; /* Khoảng cách giữa các nút */
+}
+
+h1 {
+    text-align: center; 
+    padding: 100px; 
+    margin-bottom: 10px;
+}
+
+/* danh sách nv */
+.custom-search {
+    max-width: 60%; /* Chiều rộng tối đa của thanh tìm kiếm */
+    width: 100%; /* Đảm bảo thanh tìm kiếm chiếm 100% chiều rộng của phần tử chứa */
+}
+
+.btn-outline-success {
+    color: white !important;
+    background-color: #007bff !important; /* Blue background */
+    border-color: #007bff !important; /* Blue border */
+}
+
+.btn-outline-success:hover {
+    background-color: #0056b3 !important; /* Darker blue on hover */
+    border-color: #0056b3 !important;
+}
+
+.btn-reject {
+    border: 2px solid red !important; /* Viền đỏ cho nút */
+    color: red !important; /* Màu chữ đỏ */
+    background-color: transparent !important; /* Nền trong suốt để hiển thị viền */
+    transition: background-color 0.3s, color 0.3s !important; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.btn-reject:hover {
+    background-color: rgb(195, 14, 14) !important; /* Nền đỏ khi hover */
+    color: white !important; /* Màu chữ trắng khi hover */
+    border: 2px solid rgb(195, 14, 14) !important; /* Viền giữ nguyên khi hover */
+}
+
+
+/* thông tin cá nhân  */
+.ttcn {
+    padding: 20px; 
+    margin-bottom: 10px;
+    text-align: center; /* Căn giữa văn bản */
+}
+
+.centered-list-group {
+    max-width: 60%; /* Chiều rộng tối đa của thanh tìm kiếm */
+    margin: 0 auto; /* Căn giữa danh sách */
+}
+
+/* danh sách nhân viên */
+/* Đảm bảo tất cả các phần tử trong mỗi hàng có cùng chiều rộng */
+.list-group-horizontal .list-group-item {
+    flex: 1; /* Tất cả các phần tử sẽ có chiều rộng bằng nhau */
+    text-align: center; /* Căn giữa văn bản */
+}
+
+/* Nếu bạn muốn đặt chiều rộng cố định cho các cột */
+.list-group-horizontal .list-group-item:nth-child(1) {
+    flex: 2; /* Ví dụ: Cột đầu tiên rộng gấp đôi các cột khác */
+}
+.list-group-horizontal .list-group-item:nth-child(2),
+.list-group-horizontal .list-group-item:nth-child(3),
+.list-group-horizontal .list-group-item:nth-child(4),
+.list-group-horizontal .list-group-item:nth-child(5) {
+    flex: 1; /* Các cột khác có cùng chiều rộng */
+}
+
+
+
+/* quản lý yêu cầu */
+.qlyc{
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+/* gồm điều hướng yêu cầu và khung thông tin */
+
+/* cột điều hướng yêu cầu */
+.nav-pills {
+    flex: 2;
+    max-width: 85%; 
+}
+
+/* khung thông tin leave, wfh */
+.info-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    max-width:  80%;
+    margin: 10px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.info-box p {
+    margin: 10px 0;
+}
+
+.info-box .d-flex {
+    margin-top: 10px; /* kc 2 button */
+}
+
+.separator {
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* khung thông tin updateTimeSheet */
+.container-update {
+    padding: 20px; /* Khoảng cách bên trong của container */
+    background-color: #f8f9fa; /* Màu nền của container */
+    border-radius: 8px; /* Bo tròn các góc của container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng để tạo chiều sâu */
+    margin-bottom: 20px; /* Khoảng cách phía dưới giữa các container */
+}
+
+
+.old-values, .new-values {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.buttons button {
+    width: 120px;
+    margin-right: 25px;
+}
+
+/* Cấu hình khung login-box */
+.login-box {
+    background-color: #f9f9f9; /* Màu nền cho khung */
+    border: 1px solid #ddd; /* Đường viền cho khung */
+    border-radius: 5px; /* Bo tròn góc khung */
+    margin-top: -3rem; /* kc ở trên */
+}
+
+.separator {
+    border-top: 1px solid #ccc; /* Đường phân cách */
+    margin: 20px 0; /* Khoảng cách trên và dưới */
+}

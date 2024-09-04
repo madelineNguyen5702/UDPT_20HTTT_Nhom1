@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Data</title>
+  </head>
+  <body>
+    <h1>Danh sách Nhân viên</h1>
+    <ul>
+      {% for nhanvien in nhanviens %}
+      <li>{{ nhanvien.name }}</li>
+      {% empty %}
+      <li>Không có dữ liệu.</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

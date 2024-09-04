@@ -1,0 +1,820 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+/* General styles for header */
+header {
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Distribute space between items */
+    align-items: center; /* Align items vertically */
+    background-color: #f8f9fa; /* Background color */
+    padding: 10px 20px; /* Padding around header content */
+    border-bottom: 1px solid #ccc; /* Border at the bottom */
+    width: 99%; /* Ensure width */
+    padding: 20px 10px;
+}
+
+/* Left side of the header */
+.header-left {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Align items vertically */
+}
+
+.header-left .navbar-brand {
+    font-size: 24px; /* Font size for the brand */
+    font-weight: bold; /* Bold text */
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Text color */
+}
+
+/* Center of the header */
+.header-center {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Align items vertically */
+}
+
+/* User icon styles */
+.header-center .user-icon {
+    font-size: 24px; /* Size of the icon */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Right side of the header */
+.header-right {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Align items vertically */
+    gap: 20px;
+}
+
+.header-right .logout-btn {
+    text-decoration: none; /* Remove underline */
+    color: #000; /* Text color */
+    font-weight: bold; /* Bold text */
+    padding: 5px 10px; /* Padding inside button */
+    border: 1px solid #007bff; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #fff; /* Background color */
+}
+
+.header-right .logout-btn:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: white; /* Text color on hover */
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+    text-align: center;  /* Center the text horizontally */
+    padding-top: 20px;
+}
+
+
+/* employee > home.html */
+.Main-Group {
+    display: flex;
+    width: 65%;
+    flex-wrap: wrap;
+    gap: 20px; /* Khoảng cách giữa các nút */
+    justify-content: center;
+    margin: 20px auto;
+}
+
+.home-group-left,
+.home-group-right {
+    display: flex;
+    flex-direction: column; /* Xếp theo chiều dọc */
+    gap: 20px; /* Khoảng cách giữa các nút */
+}
+
+/* Định dạng cho các nút */
+.Main-Group .btn {
+    width: 350px; /* Chiều rộng của các nút */
+    padding: 10px;
+    font-size: 16px;
+    height: 45px; 
+}
+
+/* Định dạng cho các phần tử bên trong Home-Group */
+.Main-Group div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* templates > employee > checkIn */
+.CheckIn-Group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    width: 500px; /* Chiều rộng của khung */
+    margin: 20px auto; /* Căn giữa khung trên trang */
+    padding: 20px; /* Khoảng cách giữa nội dung và viền khung */
+    border: 2px solid #0000005c; /* Màu và độ dày của viền khung */
+    border-radius: 10px; /* Bo góc khung */
+    background-color: #f8f9fa; /* Màu nền của khung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho khung */
+}
+
+.time-checkIn {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    margin-bottom: 10px;
+    text-align: center;
+    height: 50px; 
+}
+
+.clock {
+    display: flex;
+    flex-direction: column; /* Sắp xếp ngày và giờ theo chiều dọc */
+    align-items: center; /* Căn giữa ngày và giờ */
+}
+
+.date, .hour {
+    display: flex;
+    gap: 5px; /* Khoảng cách giữa các phần tử trong ngày và giờ */
+    align-items: center; 
+}
+
+
+.time-checkIn .time {
+    margin: 0; /* Remove default margin for <p> */
+    font-weight: bold;
+}
+
+/* Style for the time-value/clock */
+.time-checkIn .time-value {
+    margin: 0; /* Remove default margin for <p> */
+}
+
+.clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#okBtn {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+/* templates > employee > viewTimeSheet */ 
+body#viewTimesheetPage {
+    font-family: Arial, sans-serif;
+    display: flex; /* Thay đổi từ grid thành flex để dễ căn giữa */
+    flex-direction: column;
+    padding-top: 5px;
+    gap: 10px;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    margin: 0;
+    background-color: #f0f0f0; /* Thêm màu nền nhẹ để dễ nhìn hơn */
+    align-items: center;
+}
+body#viewTimesheetPage .calendar {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #222222;
+    overflow: hidden;
+    width: 30%;
+    color: black;
+    padding: 50px;
+}
+body#viewTimesheetPage .calendar-header {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the arrow buttons and the month/year */
+    align-items: center; /* Vertically center the content */
+    padding: 0 10px; /* Add some padding to the left and right *
+}
+body#viewTimesheetPage .btn {
+    cursor: pointer;
+    width: 250px;
+}
+
+
+.timesheet-btn-group .btn:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+}
+
+body#viewTimesheetPage #month-year {
+    font-weight: bold;
+    font-size: 20px;
+}
+body#viewTimesheetPage .weekdays, .days {
+    display: flex;
+    flex-wrap: wrap;
+}
+body#viewTimesheetPage .days {
+    height: 75%;
+}
+body#viewTimesheetPage .weekdays div, .days div {
+    width: 14.28%;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+body#viewTimesheetPage .days div {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+body#viewTimesheetPage .days div:hover {
+    background-color: gray;
+    border-radius: 50%; /* Make the date circular */
+}
+body#viewTimesheetPage .days .today {
+    background-color: #0d6efd; /* Use a distinct background color */
+    color: black; /* Make the text color white for better contrast */
+    font-weight: bold; /* Make the text bold */
+    border-radius: 50%; /* Make the date circular */
+}
+
+body#viewTimesheetPage .days .fade, .weekend {
+    color: rgba(0, 0, 0, 0.4); /* Màu đen với độ mờ 40% */
+    opacity: 0.75; /* Độ mờ 75% */
+}
+/* Ngày làm việc */
+body#viewTimesheetPage .workday {
+    background-color: #d4edda; /* Xanh lá */
+    color: #155724; /* Màu chữ */
+    border-radius: 50%; 
+}
+/* Ngày làm việc từ xa */
+body#viewTimesheetPage .wfh {
+    background-color: #fff3cd; /* Vàng */
+    color: #856404; /* Màu chữ */
+    border-radius: 50%; 
+}
+
+/* .. > templates > employee > timesheet-viewDetail.html*/
+.timesheet-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa nội dung theo chiều dọc */
+}
+.timesheet-container {
+    padding: 20px;
+    padding-left: 6%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    align-items: center;
+    width: 30%;
+}
+.timesheet-container h2 {
+    margin-bottom: 20px;
+}
+.timesheet-info {
+    margin-bottom: 10px;
+}
+.timesheet-btn-group {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    gap: 50px;
+    width: 250px;
+    align-self: center;
+}
+/* Lớp tùy chỉnh cho viền của nút */
+.btn-custom-border {
+    border: 2px solid #000000; /* Màu viền tùy chỉnh (thay đổi #007bff thành màu bạn muốn) */
+}
+
+/* .. > templates > employee > leave.html  */
+/* Main content styling */
+.leave-group {
+    display: flex;
+    flex-direction: row;
+    gap: 350px;
+}
+.leave-content {
+    background-color: #ffffff;
+    width: 70%;
+    align-items: center;
+}
+.wfh-group {
+    display: flex;
+    flex-direction: row;
+    gap: 350px;
+}
+.wfh-button {
+    width: 200px;
+}
+.edit-timesheet-group {
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+}
+.update-timesheet-content {
+    background-color: #ffffff;
+    width: 70%;
+}
+main.update-timesheet-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+form {
+    max-width: 500px;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group label {
+    flex-basis: 100px;
+    font-weight: bold;
+}
+.form-group1 {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.form-group1 label {
+    flex-basis: 200px;
+    font-weight: bold;
+}
+
+
+.form-group input,
+.form-group textarea {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: center; /* Đảm bảo nút được căn giữa */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* components > sidebar-request.html */
+/* Sidebar styling */
+.msb {
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.side-menu-leave-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu-leave-container li {
+    position: relative;
+}
+
+.side-menu-leave-container a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.side-menu-leave-container a:hover {
+    background-color: #e2e6ea;
+    color: #007bff;
+}
+
+.dropdown-toggle .fa-envelope {
+    margin-right: 10px;
+}
+
+.dropdown-toggle .fa-caret-down {
+    margin-left: 10%;
+}
+
+.dropdown-menu {
+    display: block; /* Show the dropdown menu by default */
+    background-color: #f8f9fa;
+    margin-top: 5px;
+    padding-left: 10px;
+}
+
+.dropdown-menu a {
+    padding-left: 30px; /* Adjust left padding to align text */
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu a i {
+    margin-left: 10px;
+}
+
+/* statusRequest.html */
+.status-container {
+    display: flex;
+    flex-direction: row;
+    gap: 350px;
+}
+.request {
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 450px;
+}
+.request-info {
+    font-size: 16px;
+}
+.request-info h2 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+}
+.request-info p {
+    margin: 5px 0;
+}
+.request-status {
+    padding: 8px 12px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* profile.htmml */
+body#info-body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info-container {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-self: center;
+}
+.info-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.info-group label {
+    font-weight: bold;
+    width: 150px;
+}
+
+.info-group span {
+    flex: 1;
+}
+
+/* points.html */
+body#points-body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.points-container {
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.points-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.points-info {
+    margin-bottom: 20px;
+    text-align: left;
+}
+/* proflie.html */
+body#info-body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.info-container {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.info-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.info-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.info-group label {
+    font-weight: bold;
+    width: 150px;
+}
+
+.info-group span {
+    flex: 1;
+}
+
+.view-button {
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000;
+}
+
+.voucher-list {
+    text-align: left;
+}
+
+.voucher-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.redeem-button {
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000;
+}
+
+/* activity.html */
+body#activity-body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.activity-container {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.activity-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.activity-block {
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: left;
+}
+
+.activity-date, .activity-type {
+    display: inline-block;
+    width: 49%;
+    font-weight: bold;
+}
+
+.activity-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.activity-time {
+    font-size: 18px;
+    font-weight: bold;
+    flex: 1;
+}
+
+.activity-button {
+    flex: 1;
+    text-align: center;
+}
+
+.activity-button button {
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000;
+}
+
+.activity-stats {
+    flex: 2;
+    text-align: left;
+}
+
+/* voucher.html */
+body#voucher-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.points-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.voucher-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.voucher-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.voucher-text {
+    font-size: 1.2rem;
+    flex-grow: 1;
+    text-align: left;
+    margin-right: 20px;
+}
+
+.use-button {
+    padding: 5px 15px;
+    font-size: 1rem;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    color: #000;
+}
+
+.use-button:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* signup.html */
+body#signup-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #f4f4f4;
+}
+.create-account-content {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.create-account-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Phần mới thêm */
+.form-wrapper {
+    border: 2px solid #000;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.create-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.signup-form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.signup-form-group label {
+    flex: 1;
+    text-align: left;
+    font-size: 1rem;
+    margin-right: 20px;
+}
+
+.signup-form-group input,
+.signup-form-group select {
+    flex: 2;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.create-account-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 2px solid #000;
+    border-radius: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 20px;
+    color: #000;
+}
+
+.create-account-button:hover {
+    background-color: #000;
+    color: #fff;
+}

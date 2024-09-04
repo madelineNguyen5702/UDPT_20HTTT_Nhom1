@@ -1,0 +1,173 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Trang chủ</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body>
+    <h1>Trang chủ</h1>
+    <!-- Danh sách button ở trang chủ Employee-->
+    <div class="Main-Group">
+      <div class="home-group-left">
+        <div class="checkIn">
+          <button id="checkInBtn" type="button" class="btn btn-primary btn-lg">
+            Check-in
+          </button>
+        </div>
+        <div class="checkOut">
+          <button id="checkOutBtn" type="button" class="btn btn-primary btn-lg">
+            Check-out
+          </button>
+        </div>
+        <div class="profile">
+          <button id="profileBtn" type="button" class="btn btn-primary btn-lg">
+            Xem thông tin
+          </button>
+        </div>
+        <div class="profile">
+          <button id="requestBtn" type="button" class="btn btn-primary btn-lg">
+            Gửi yêu cầu
+          </button>
+        </div>
+      </div>
+
+      <div class="home-group-right">
+        <div class="time-checkIn">
+          <p></p>
+          <p class="time">Thời gian check-in:</p>
+          <p class="time-value" id="timeValue">-</p>
+        </div>
+        <div class="time-sheet">
+          <button
+            id="timesheetBtn"
+            type="button"
+            class="btn btn-primary btn-lg"
+          >
+            Xem time-sheet
+          </button>
+        </div>
+        <div class="activity">
+          <button id="activityBtn" type="button" class="btn btn-primary btn-lg">
+            Xem hoạt động
+          </button>
+        </div>
+        <div class="points">
+          <button id="pointsBtn" type="button" class="btn btn-primary btn-lg">
+            Points
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Xử lý sự kiện click cho nút Check-in
+      document
+        .getElementById("checkInBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/checkin";
+        });
+      // Xử lý sự kiện click cho nút Xem timesheet
+      document
+        .getElementById("timesheetBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/timesheet";
+        });
+      // Xử lý sự kiện click cho nút Xem thông tin
+      document
+        .getElementById("profileBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/profile";
+        });
+      // Xử lý sự kiện click cho nút Xem hoạt động
+      document
+        .getElementById("activityBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/activity";
+        });
+      // Xử lý sự kiện click cho nút Gửi yêu cầu
+      document
+        .getElementById("requestBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/leave";
+        });
+      // Xử lý sự kiện click cho nút Points
+      document
+        .getElementById("pointsBtn")
+        ?.addEventListener("click", function () {
+          window.location.href = "/employee/points";
+        });
+
+      // Hiển thị thời gian check-in nếu đã được lưu (dữ liệu lấy từ checkIn.html)
+      window.addEventListener("load", function () {
+        let checkInTime = localStorage.getItem("checkInTime");
+        if (checkInTime) {
+          document.getElementById("timeValue").textContent = checkInTime;
+        }
+      });
+
+      // Xử lý sự kiện click cho nút Check-out
+      document
+        .getElementById("checkOutBtn")
+        ?.addEventListener("click", function () {
+          // Đặt thời gian check-in về trạng thái "-"
+          document.getElementById("timeValue").textContent = "-";
+
+          // Lấy thời gian hiện tại (thời gian check-out)
+          let checkOutTime = new Date().toLocaleTimeString();
+
+          // Gửi dữ liệu check-in và check-out tới server
+          let checkInTime = localStorage.getItem("checkInTime"); // Thời gian check-in đã lưu
+          if (checkInTime) {
+            // Tạo object chứa dữ liệu check-in và check-out
+            let checkData = {
+              checkInTime: checkInTime,
+              checkOutTime: checkOutTime,
+            };
+
+            // Gửi dữ liệu tới server thông qua AJAX
+            $.ajax({
+              url: "saveCheckData.php", // PHP file xử lý lưu dữ liệu vào MySQL
+              method: "POST",
+              data: checkData,
+              success: function (response) {
+                // Xóa thời gian check-in khỏi localStorage
+                localStorage.removeItem("checkInTime");
+
+                // Thông báo thành công (tùy chọn)
+                alert("Check-out thành công và dữ liệu đã được lưu.");
+              },
+              error: function (error) {
+                // Xử lý lỗi (tùy chọn)
+                alert("Có lỗi xảy ra khi lưu dữ liệu.");
+              },
+            });
+          } else {
+            alert("Bạn chưa check-in.");
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Check-in</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="/employee/home" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body>
+    <h1>Check-in</h1>
+
+    <div class="CheckIn-Group">
+      <div class="time-checkIn">
+        <p class="time">Thời gian check-in:</p>
+        <div class="hero">
+          <div class="container">
+            <div class="clock">
+              <div class="date">
+                <span id="dd">00</span>
+                <span>/</span>
+                <span id="mm">00</span>
+                <span>/</span>
+                <span id="yyyy">00</span>
+              </div>
+
+              <div class="hour">
+                <span id="hrs">00</span>
+                <span>:</span>
+                <span id="min">00</span>
+                <span>:</span>
+                <span id="sec">00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-sm" id="okBtn">
+        OK
+      </button>
+    </div>
+
+    <script>
+      // Nạp header.html vào phần header-placeholder
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("../components/header.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("header-placeholder").innerHTML = data;
+          })
+          .catch((error) => console.error("Error loading header:", error));
+      });
+    </script>
+    <script>
+      let dd = document.getElementById("dd");
+      let mm = document.getElementById("mm");
+      let yyyy = document.getElementById("yyyy");
+
+      let hrs = document.getElementById("hrs");
+      let min = document.getElementById("min");
+      let sec = document.getElementById("sec");
+
+      /* Tạo thời gian thực để check in */
+      setInterval(() => {
+        let currentTime = new Date();
+
+        dd.innerHTML =
+          (currentTime.getDate() < 10 ? "0" : "") + currentTime.getDate();
+        mm.innerHTML =
+          (currentTime.getMonth() + 1 < 10 ? "0" : "") +
+          (currentTime.getMonth() + 1);
+        yyyy.innerHTML = currentTime.getFullYear();
+
+        hrs.innerHTML =
+          (currentTime.getHours() < 10 ? "0" : "") + currentTime.getHours();
+        min.innerHTML =
+          (currentTime.getMinutes() < 10 ? "0" : "") + currentTime.getMinutes();
+        sec.innerHTML =
+          (currentTime.getSeconds() < 10 ? "0" : "") + currentTime.getSeconds();
+      }, 1000);
+
+      /* Khi click button, lấy thời gian hiện tại đẩy tới trang chủ */
+      document.getElementById("okBtn").addEventListener("click", function () {
+        let checkInTime = `${dd.innerHTML}/${mm.innerHTML}/${yyyy.innerHTML} ${hrs.innerHTML}:${min.innerHTML}:${sec.innerHTML}`;
+        localStorage.setItem("checkInTime", checkInTime);
+        window.location.href = "/employee/home";
+      });
+    </script>
+  </body>
+</html>

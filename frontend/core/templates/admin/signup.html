@@ -1,0 +1,77 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Tạo tài khoản</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <header>
+    <div class="header-left">
+      <a href="home.html" class="navbar-brand">NTP</a>
+    </div>
+    <div class="header-right">
+      <span class="navbar-brand">Username</span>
+      <a href="../login.html" class="navbar-brand active-link">Đăng xuất</a>
+    </div>
+  </header>
+  <body class="signup-body" id="signup-body">
+    <div class="create-account-content">
+      <h1 class="create-account-title">TẠO TÀI KHOẢN</h1>
+      <div class="form-wrapper">
+        <form class="create-account-form">
+          <div class="signup-form-group">
+            <label for="name">Họ và tên:</label>
+            <input type="text" id="name" name="name" />
+          </div>
+          <div class="signup-form-group">
+            <label for="gender">Giới tính:</label>
+            <select id="gender" name="gender">
+              <option value="nam">Nam</option>
+              <option value="nu">Nữ</option>
+            </select>
+          </div>
+          <div class="signup-form-group">
+            <label for="dob">Ngày sinh:</label>
+            <input type="date" id="dob" name="dob" />
+          </div>
+          <div class="signup-form-group">
+            <label for="cccd">CCCD:</label>
+            <input type="text" id="cccd" name="cccd" />
+          </div>
+          <div class="signup-form-group">
+            <label for="mst">MST:</label>
+            <input type="text" id="mst" name="mst" />
+          </div>
+          <div class="signup-form-group">
+            <label for="address">Địa chỉ:</label>
+            <input type="text" id="address" name="address" />
+          </div>
+          <div class="signup-form-group">
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" name="phone" />
+          </div>
+          <div class="signup-form-group">
+            <label for="account">Số tài khoản:</label>
+            <input type="text" id="account" name="account" />
+          </div>
+        </form>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">
+        Tạo tài khoản nhân viên mới
+      </button>
+    </div>
+  </body>
+</html>
