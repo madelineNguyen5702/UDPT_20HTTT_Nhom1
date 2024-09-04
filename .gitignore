@@ -163,5 +163,9 @@ cython_debug/
 
 # MySQL database files
 mysql/
+db_employee/
+db_leave/
+mysqlemployee/
+mysqlleave/
 *.sql
 *.sql.gz
