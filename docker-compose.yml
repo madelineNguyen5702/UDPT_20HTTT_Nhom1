@@ -1,0 +1,177 @@
+# docker compose --env-file .env.dev up --build
+services:
+  kong-database:
+    image: postgres:13
+    container_name: kong-database
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kongpass
+    ports:
+      - "5432:5432"
+
+  kong-migrations:
+    image: kong:3.7.1
+    container_name: kong-migrations
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kongpass
+    command: kong migrations bootstrap
+    depends_on:
+      - kong-database
+
+  kong-gateway:
+    image: kong:3.7.1
+    container_name: kong-gateway
+    volumes:
+      - ./kong.yml:/etc/kong/kong.yml
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kongpass
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
+      KONG_ADMIN_GUI_URL: http://localhost:8002
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "127.0.0.1:8001:8001"
+      - "127.0.0.1:8002:8002"
+      - "127.0.0.1:8444:8444"
+    depends_on:
+      - kong-database
+      - kong-migrations
+
+
+  # employee_service:
+  #   image: doanudpt-employee_service
+  #   build:
+  #     context: ./Employee  
+  #   ports:
+  #     - "8004:8004"
+  #   networks:
+  #     - mynetwork
+  #   command: gunicorn --bind 0.0.0.0:8004 Employee.wsgi:application
+
+
+
+  # leave_service:
+  #   build:
+  #     context: ./Leave  
+  #   ports:
+  #     - "8005:8005"
+  #   command: gunicorn --bind 0.0.0.0:8005 Leave.wsgi:application
+
+
+  # reward_service:
+  #   build:
+  #     context: ./Reward  
+  #   ports:
+  #     - "8006:8006"
+  #   command: gunicorn --bind 0.0.0.0:8006 Reward.wsgi:application
+
+  # website:
+  #   image: doanudpt-website_service
+  #   build:
+  #     context: ./Website  # Thay đổi nếu thư mục khác
+  #   ports:
+  #     - "8009:8009"
+  #   networks:
+  #     - mynetwork
+  #   command: gunicorn --bind 0.0.0.0:8009 Website.wsgi:application
+  #   depends_on:
+  #     - employee_service
+  #     - leave_service
+  #     - reward_service
+  
+  db:
+    container_name: mysql-container
+    image: mysql:8.0
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
+      - MYSQL_USER=${SQL_USER}
+      - MYSQL_PASSWORD=${SQL_PASSWORD}
+      - MYSQL_DATABASE=${SQL_DATABASE}
+    ports:
+      - 3306:3306
+
+  web:
+    container_name: django-web
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8007
+    volumes:
+      - ./app/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    ports:
+      - 8007:8007
+    depends_on:
+      - db
+    links:
+      - db
+
+  service_employee:
+    container_name: service_employee
+    build:
+      context: ./serviceEmployee
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8004
+    volumes:
+      - ./serviceEmployee/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    ports:
+      - 8004:8004
+    depends_on:
+      - db
+    links:
+      - db
+
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8008
+    volumes:
+      - ./frontend/:/usr/src/app/
+    env_file:
+      - ./.env.dev
+    ports:
+      - 8008:8008
+    depends_on:
+      - db
+    links:
+      - db
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: myadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${SQL_ROOT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+networks:
+  default:
+    external: true
+    name: kong-net
+  mynetwork:
+    driver: bridge
