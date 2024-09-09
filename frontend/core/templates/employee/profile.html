@@ -31,40 +31,85 @@
     <div class="info-container">
       <div class="info-group">
         <label>Họ và tên:</label>
-        <span>Phan Thanh Thúy</span>
+        <span id="name"></span>
       </div>
       <div class="info-group">
         <label>Giới tính:</label>
-        <span>Nữ</span>
+        <span id="gender"></span>
       </div>
       <div class="info-group">
         <label>Ngày sinh:</label>
-        <span>15/12/2002</span>
+        <span id="dob"></span>
       </div>
       <div class="info-group">
         <label>CCCD:</label>
-        <span>070302124737</span>
+        <span id="cccd"></span>
       </div>
       <div class="info-group">
         <label>Số điện thoại:</label>
-        <span>039 123 4567</span>
+        <span id="phone"></span>
       </div>
       <div class="info-group">
         <label>Email:</label>
-        <span>ptt@npt.com</span>
+        <span id="email"></span>
       </div>
       <div class="info-group">
         <label>MST:</label>
-        <span>1024542455</span>
+        <span id="tax_code"></span>
       </div>
       <div class="info-group">
         <label>Địa chỉ:</label>
-        <span>974 Nguyễn Trãi, phường 1, quận 5, TPHCM</span>
+        <span id="address"></span>
       </div>
       <div class="info-group">
         <label>STK:</label>
-        <span>1037458887 Vietcombank</span>
+        <span id="bank_account"></span>
       </div>
+      <script>
+        $(document).ready(function () {
+          // Hàm lấy giá trị từ cookie
+          function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+          }
+      
+          // Lấy MaNV từ cookie
+          const MaNV = getCookie("MaNV");
+      
+          if (MaNV) {
+            // Gọi API với MaNV từ cookie bằng phương thức POST
+            $.ajax({
+              url: "http://localhost:8000/employeeService/getEmployeeInfo/",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ MaNV: MaNV }),  // Truyền MaNV vào body của POST request
+              
+              success: function (data) {
+                // Giả định data là một object với các trường tương ứng với thông tin nhân viên
+      
+                // Cập nhật thông tin lên giao diện
+                $("#name").text(data.HoTen);
+                $("#gender").text(data.GioiTinh);
+                $("#dob").text(data.NgaySinh);
+                $("#cccd").text(data.CCCD);
+                $("#phone").text(data.SDT);
+                $("#email").text(data.Email);
+                $("#tax_code").text(data.MaSoThue);
+                $("#address").text(data.DiaChi);
+                $("#bank_account").text(data.STK);
+              },
+              error: function (xhr, status, error) {
+                console.error("Có lỗi xảy ra khi lấy thông tin nhân viên:", error);
+              },
+            });
+          } else {
+            console.error("Không tìm thấy MaNV trong cookie.");
+          }
+        });
+      </script>
+      
     </div>
   </body>
 </html>
+
