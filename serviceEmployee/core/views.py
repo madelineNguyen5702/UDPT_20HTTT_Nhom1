@@ -27,7 +27,7 @@ class CheckNhanVienView(APIView):
             else:
                 message = f"Mật khẩu không đúng"
         else:
-            message = f"Tên '{ma_nv}' không tồn tại (not available)."
+            message = f"Nhân viên '{ma_nv}' không tồn tại."
 
         return Response({'message': message}, status=status.HTTP_200_OK)
     def post(self, request):
@@ -42,7 +42,7 @@ class CheckNhanVienView(APIView):
             else:
                 message = f"Mật khẩu không đúng"
         else:
-            message = f"Tên '{ma_nv}' không tồn tại (not available)."
+            message = f"Nhân viên '{ma_nv}' không tồn tại."
 
         return Response({'message': message}, status=status.HTTP_200_OK)
     

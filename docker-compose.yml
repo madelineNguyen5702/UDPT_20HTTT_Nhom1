@@ -65,6 +65,7 @@ services:
       - 3306:3306
     networks:
       - mynetwork
+    
 
   db_leave:
     container_name: db_leave

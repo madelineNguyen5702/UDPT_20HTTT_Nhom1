@@ -85,7 +85,7 @@ DATABASES = {
         "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, 'db.sqlite3')),
         "USER": os.environ.get("SQL_USER", "myuser"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "myuserpassword"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "HOST": "db_leave",
         "PORT": os.environ.get("SQL_PORT", "3306"),
     }
 }
