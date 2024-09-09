@@ -8,7 +8,7 @@ from django.contrib.sessions.models import Session
 from .serializers import *
 
 class TimesheetView(viewsets.ViewSet):
-    @action(detail=False, methods=['get'], url_path='getTimesheet')
+    @action(detail=False, methods=['post'], url_path='getTimesheet')
     def getTimesheet(self, request):
         manv = request.data.get('MaNV')
         if not manv:

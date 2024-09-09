@@ -142,6 +142,20 @@ services:
     networks:
       - mynetwork
 
+  # strava:
+  #   container_name: strava
+  #   build:
+  #     context: ./Reward/strava  # Đường dẫn đến thư mục chứa Dockerfile cho Strava service
+  #     # dockerfile: Dockerfile
+  #   command: python strava_api.py  # Lệnh để chạy Strava service
+  #   volumes:
+  #     - ./strava/:/usr/src/app/
+  #   env_file:
+  #     - ./.env.dev  # Sử dụng file .env.dev để quản lý biến môi trường
+  #   ports:
+  #     - "5000:5000"  # Port mà Strava service sẽ chạy
+ 
+
 
   frontend:
     container_name: frontend

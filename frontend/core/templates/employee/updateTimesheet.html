@@ -63,23 +63,23 @@
         </div>
       </div>
       <main class="update-timesheet-content">
-        <form>
+        <form class="timesheet-form">
           <h1>Cập nhật timesheet</h1>
           <div class="form-group1">
             <label for="from-date">Ngày:</label>
-            <input type="date" id="from-date" name="from-date" />
+            <input type="date" id="from-date" name="from-date" class="input-date-time" />
           </div>
           <div class="form-group1">
             <label for="checkin-hour">Thời gian check-in:</label>
-            <input type="hour" id="checkin-hour" name="checkin-hour" />
+            <input type="time" id="checkin-hour" name="checkin-hour" class="input-date-time" />
           </div>
           <div class="form-group1">
             <label for="checkout-hour">Thời gian check-out:</label>
-            <input type="hour" id="checkout-hour" name="checkout-hour" />
+            <input type="time" id="checkout-hour" name="checkout-hour" class="input-date-time" />
           </div>
         </form>
         <button type="submit" id="submit-timesheet">Gửi</button>
-      </main>
+      </main>      
     </div>
   </body>
   <script>
