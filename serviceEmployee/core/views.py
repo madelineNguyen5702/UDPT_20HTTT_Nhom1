@@ -49,7 +49,7 @@ class CheckNhanVienView(APIView):
         return Response({'message': message}, status=status.HTTP_200_OK)
     
 class DanhSachNhanVienQuanLyViewSet(viewsets.ViewSet):
-    @action(detail=False, methods=['get'], url_path='get_employees_by_manager')
+    @action(detail=False, methods=['post'], url_path='get_employees_by_manager')
     def get_employees_by_manager(self, request):
         maql = request.data.get('MaQL')
         if not maql:

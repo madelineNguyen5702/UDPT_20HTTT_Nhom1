@@ -32,7 +32,7 @@ class DanhSachNhanVienQuanLy(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'DanhSachNhanVienQuanLy'
+        db_table = 'NV_QL'
 
 class Timesheet(models.Model):
     Ngay = models.DateField()
