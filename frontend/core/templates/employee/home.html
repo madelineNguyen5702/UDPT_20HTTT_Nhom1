@@ -83,6 +83,26 @@
     </div>
 
     <script>
+      let currentTime = new Date();
+      let dd = (currentTime.getDate() < 10 ? "0" : "") + currentTime.getDate();
+      let mm =
+        (currentTime.getMonth() + 1 < 10 ? "0" : "") +
+        (currentTime.getMonth() + 1);
+      let yyyy = currentTime.getFullYear();
+
+      let hrs =
+        (currentTime.getHours() < 10 ? "0" : "") + currentTime.getHours();
+      let min =
+        (currentTime.getMinutes() < 10 ? "0" : "") + currentTime.getMinutes();
+      let sec =
+        (currentTime.getSeconds() < 10 ? "0" : "") + currentTime.getSeconds();
+
+      // Hàm lấy giá trị của cookie theo tên
+      function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      }
       // Xử lý sự kiện click cho nút Check-in
       document
         .getElementById("checkInBtn")
@@ -116,56 +136,102 @@
       // Xử lý sự kiện click cho nút Points
       document
         .getElementById("pointsBtn")
-        ?.addEventListener("click", function () {
+        ?.addEventListener("click", async function () {
           window.location.href = "/employee/points";
         });
 
-      // Hiển thị thời gian check-in nếu đã được lưu (dữ liệu lấy từ checkIn.html)
-      window.addEventListener("load", function () {
-        let checkInTime = localStorage.getItem("checkInTime");
-        if (checkInTime) {
-          document.getElementById("timeValue").textContent = checkInTime;
+      // Hiển thị thời gian check-in nếu đã được lưu
+      async function fetchCheckInData() {
+        try {
+          let yyyy = new Date().getFullYear();
+          let mm = ("0" + (new Date().getMonth() + 1)).slice(-2); // Format month to 2 digits
+          let dd = ("0" + new Date().getDate()).slice(-2); // Format day to 2 digits
+
+          let dataa = {
+            MaNV: getCookie("MaNV"),
+            Ngay: `${yyyy}-${mm}-${dd}`,
+          };
+
+          // Await the fetch promise
+          const response = await fetch(
+            "http://localhost:8005/timeManagement/getCheckIn/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dataa),
+            }
+          );
+
+          // Await the response.json() promise
+          const data = await response.json();
+
+          // Check if the response contains data or an error message
+          if (data.message !== "Not CheckIn") {
+            let checkInRecord = data[0]; // Get the first record
+            let checkInTime = `${checkInRecord.Ngay} ${checkInRecord.Checkin}`;
+            if (!checkInRecord.Checkout) {
+              document.getElementById("timeValue").textContent = checkInTime;
+            } else {
+              document.getElementById("timeValue").textContent = "-";
+            }
+          } else {
+            console.log("No check-in data found for today.");
+            document.getElementById("timeValue").textContent = "-";
+          }
+        } catch (error) {
+          console.error("There was a problem with the fetch operation:", error);
+          document.getElementById("timeValue").textContent = "-";
         }
-      });
+      }
+
+      // Call the function when the page loads
+      window.addEventListener("load", fetchCheckInData);
 
       // Xử lý sự kiện click cho nút Check-out
       document
         .getElementById("checkOutBtn")
-        ?.addEventListener("click", function () {
-          // Đặt thời gian check-in về trạng thái "-"
-          document.getElementById("timeValue").textContent = "-";
+        ?.addEventListener("click", async function () {
+          let maNV = getCookie("MaNV");
+          let ngay = `${yyyy}-${mm}-${dd}`;
+          let checkout = `${hrs}:${min}:${sec}`;
 
-          // Lấy thời gian hiện tại (thời gian check-out)
-          let checkOutTime = new Date().toLocaleTimeString();
+          if (!maNV) {
+            alert("Không tìm thấy mã nhân viên trong cookie.");
+            return;
+          }
 
-          // Gửi dữ liệu check-in và check-out tới server
-          let checkInTime = localStorage.getItem("checkInTime"); // Thời gian check-in đã lưu
-          if (checkInTime) {
-            // Tạo object chứa dữ liệu check-in và check-out
-            let checkData = {
-              checkInTime: checkInTime,
-              checkOutTime: checkOutTime,
-            };
+          let data = {
+            MaNV: maNV,
+            Ngay: ngay,
+            Checkout: checkout,
+          };
 
-            // Gửi dữ liệu tới server thông qua AJAX
-            $.ajax({
-              url: "saveCheckData.php", // PHP file xử lý lưu dữ liệu vào MySQL
-              method: "POST",
-              data: checkData,
-              success: function (response) {
-                // Xóa thời gian check-in khỏi localStorage
-                localStorage.removeItem("checkInTime");
-
-                // Thông báo thành công (tùy chọn)
-                alert("Check-out thành công và dữ liệu đã được lưu.");
-              },
-              error: function (error) {
-                // Xử lý lỗi (tùy chọn)
-                alert("Có lỗi xảy ra khi lưu dữ liệu.");
-              },
-            });
-          } else {
-            alert("Bạn chưa check-in.");
+          try {
+            const response = await fetch(
+              "http://localhost:8005/timeManagement/checkOut/",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              }
+            );
+            if (response.ok) {
+              document.getElementById("timeValue").textContent = "-";
+              window.location.href = "/employee/home";
+            } else {
+              throw new Error("Network response was not ok.");
+            }
+          } catch (error) {
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            );
+            document.getElementById("result").textContent =
+              "Có lỗi xảy ra khi kiểm tra.";
           }
         });
     </script>

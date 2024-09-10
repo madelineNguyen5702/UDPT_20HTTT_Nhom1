@@ -62,17 +62,6 @@
     </div>
 
     <script>
-      // Nạp header.html vào phần header-placeholder
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("../components/header.html")
-          .then((response) => response.text())
-          .then((data) => {
-            document.getElementById("header-placeholder").innerHTML = data;
-          })
-          .catch((error) => console.error("Error loading header:", error));
-      });
-    </script>
-    <script>
       let dd = document.getElementById("dd");
       let mm = document.getElementById("mm");
       let yyyy = document.getElementById("yyyy");
@@ -100,12 +89,78 @@
           (currentTime.getSeconds() < 10 ? "0" : "") + currentTime.getSeconds();
       }, 1000);
 
+      /* Hàm để lấy cookie theo tên */
+      function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+      }
+
+      /* Hàm để đặt cookie */
+      function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+          let date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+
       /* Khi click button, lấy thời gian hiện tại đẩy tới trang chủ */
-      document.getElementById("okBtn").addEventListener("click", function () {
-        let checkInTime = `${dd.innerHTML}/${mm.innerHTML}/${yyyy.innerHTML} ${hrs.innerHTML}:${min.innerHTML}:${sec.innerHTML}`;
-        localStorage.setItem("checkInTime", checkInTime);
-        window.location.href = "/employee/home";
-      });
+      document
+        .getElementById("okBtn")
+        .addEventListener("click", async function () {
+          let checkInTime = `${dd.innerHTML}/${mm.innerHTML}/${yyyy.innerHTML} ${hrs.innerHTML}:${min.innerHTML}:${sec.innerHTML}`;
+
+          // Lấy MaNV từ cookie
+          let maNV = getCookie("MaNV");
+          let ngay = `${yyyy.innerHTML}-${mm.innerHTML}-${dd.innerHTML}`;
+          let checkin = `${hrs.innerHTML}:${min.innerHTML}:${sec.innerHTML}`;
+
+          // Kiểm tra xem MaNV có tồn tại hay không
+          if (!maNV) {
+            alert("Không tìm thấy mã nhân viên trong cookie.");
+            return;
+          }
+
+          let data = {
+            MaNV: maNV,
+            Ngay: ngay,
+            Checkin: checkin,
+          };
+
+          try {
+            console.log(data);
+
+            const response = await fetch(
+              "http://localhost:8005/timeManagement/checkIn/",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            if (response.ok) {
+              // Lưu thời gian checkIn vào cookie
+              setCookie("checkInTime", checkInTime, 1);
+              // Chuyển hướng tới trang chủ
+              window.location.href = "/employee/home";
+            } else {
+              throw new Error("Network response was not ok.");
+            }
+          } catch (error) {
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            );
+            document.getElementById("result").textContent =
+              "Có lỗi xảy ra khi kiểm tra.";
+          }
+        });
     </script>
   </body>
 </html>
