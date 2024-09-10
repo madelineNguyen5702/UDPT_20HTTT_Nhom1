@@ -71,11 +71,11 @@
           </div>
           <div class="form-group1">
             <label for="checkin-hour">Thời gian check-in:</label>
-            <input type="time" id="checkin-hour" name="checkin-hour" class="input-date-time" />
+            <input type="text" id="checkin-hour" name="checkin-hour" class="input-date-time" placeholder="HH:MM:SS" />
           </div>
           <div class="form-group1">
             <label for="checkout-hour">Thời gian check-out:</label>
-            <input type="time" id="checkout-hour" name="checkout-hour" class="input-date-time" />
+            <input type="text" id="checkout-hour" name="checkout-hour" class="input-date-time" placeholder="HH:MM:SS" />
           </div>
         </form>
         <button type="submit" id="submit-timesheet">Gửi</button>
@@ -83,6 +83,25 @@
     </div>
   </body>
   <script>
+    // định dạng 24h cho đồng bộ với data
+    function create24HourTimePicker(inputId) {
+      const inputElement = document.getElementById(inputId);
+      inputElement.addEventListener('focus', function() {
+        this.type = 'time';
+        this.step = '1'; // Allows selection of seconds
+      });
+      inputElement.addEventListener('blur', function() {
+        this.type = 'text';
+        if (!this.value) {
+          this.placeholder = 'HH:MM:SS';
+        }
+      });
+    }
+  
+    create24HourTimePicker('checkin-hour');
+    create24HourTimePicker('checkout-hour');
+
+    // 
     $(document).ready(function () {
       // Initially show the dropdown menu
       $(".dropdown-menu").show();
