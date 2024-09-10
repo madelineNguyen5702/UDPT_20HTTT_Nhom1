@@ -23,7 +23,6 @@
       <a href="/employee/home" class="navbar-brand">NTP</a>
     </div>
     <div class="header-right">
-      <span class="navbar-brand">Username</span>
       <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
     </div>
   </header>
@@ -60,6 +59,7 @@
           <p class="time">Thời gian check-in:</p>
           <p class="time-value" id="timeValue">-</p>
         </div>
+
         <div class="time-sheet">
           <button
             id="timesheetBtn"
@@ -169,12 +169,16 @@
 
           // Check if the response contains data or an error message
           if (data.message !== "Not CheckIn") {
+            document.getElementById("checkInBtn").disabled = true;
             let checkInRecord = data[0]; // Get the first record
             let checkInTime = `${checkInRecord.Ngay} ${checkInRecord.Checkin}`;
             if (!checkInRecord.Checkout) {
               document.getElementById("timeValue").textContent = checkInTime;
             } else {
-              document.getElementById("timeValue").textContent = "-";
+              document.getElementById(
+                "timeValue"
+              ).textContent = `${checkInTime} (Checked out at ${checkInRecord.Checkout})`;
+              document.getElementById("checkOutBtn").disabled = true;
             }
           } else {
             console.log("No check-in data found for today.");
