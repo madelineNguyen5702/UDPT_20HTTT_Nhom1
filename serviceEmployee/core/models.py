@@ -34,58 +34,58 @@ class DanhSachNhanVienQuanLy(models.Model):
         managed = False
         db_table = 'NV_QL'
 
-class Timesheet(models.Model):
-    Ngay = models.DateField()
-    MaNV = models.CharField(max_length=50)
-    Checkin = models.TimeField()
-    Checkout = models.TimeField()
-    isLeave = models.BooleanField()
-    isWFH = models.BooleanField()
+# class Timesheet(models.Model):
+#     Ngay = models.DateField()
+#     MaNV = models.CharField(max_length=50)
+#     Checkin = models.TimeField()
+#     Checkout = models.TimeField()
+#     isLeave = models.BooleanField()
+#     isWFH = models.BooleanField()
     
-    class Meta:
-        managed = False
-        db_table = 'Timesheet'
+#     class Meta:
+#         managed = False
+#         db_table = 'Timesheet'
 
 
-class RequestLeave(models.Model):
-    MaYC = models.CharField(max_length=50)
-    MaNV = models.CharField(max_length=50)
-    NgayGui = models.DateTimeField()
-    NgayDuyet = models.DateTimeField()
-    NgayRequest = models.DateTimeField()
-    TrangThai = models.CharField(max_length=50)
-    IDNguoiDuyet = models.CharField(max_length=50)
+# class RequestLeave(models.Model):
+#     MaYC = models.CharField(max_length=50)
+#     MaNV = models.CharField(max_length=50)
+#     NgayGui = models.DateTimeField()
+#     NgayDuyet = models.DateTimeField()
+#     NgayRequest = models.DateTimeField()
+#     TrangThai = models.CharField(max_length=50)
+#     IDNguoiDuyet = models.CharField(max_length=50)
     
-    class Meta:
-        managed = False
-        db_table = 'NV_RequestLeave'
+#     class Meta:
+#         managed = False
+#         db_table = 'NV_RequestLeave'
 
-class RequestWFH(models.Model):
-    MaYC = models.CharField(max_length=50)
-    MaNV = models.CharField(max_length=50)
-    NgayGui = models.DateTimeField()
-    NgayDuyet = models.DateTimeField()
-    NgayRequest = models.DateTimeField()
-    TrangThai = models.CharField(max_length=50)
-    IDNguoiDuyet = models.CharField(max_length=50)
+# class RequestWFH(models.Model):
+#     MaYC = models.CharField(max_length=50)
+#     MaNV = models.CharField(max_length=50)
+#     NgayGui = models.DateTimeField()
+#     NgayDuyet = models.DateTimeField()
+#     NgayRequest = models.DateTimeField()
+#     TrangThai = models.CharField(max_length=50)
+#     IDNguoiDuyet = models.CharField(max_length=50)
     
-    class Meta:
-        managed = False
-        db_table = 'NV_RequestWFH'
+#     class Meta:
+#         managed = False
+#         db_table = 'NV_RequestWFH'
 
-class RequestUpdate(models.Model):
-    MaYC = models.CharField(max_length=50)
-    MaNV = models.CharField(max_length=50)
-    Ngay = models.DateField()
-    Checkin = models.TimeField()
-    updateCheckin = models.TimeField()
-    Checkout = models.TimeField()
-    updateCheckout = models.TimeField()
-    NgayGui = models.DateTimeField()
-    ChiTiet = models.CharField(max_length=50)
-    TrangThai = models.CharField(max_length=50)
-    NgayDuyet = models.DateTimeField()
-    IDNguoiDuyet = models.CharField(max_length=50)
-    class Meta:
-        managed = False
-        db_table = 'NV_RequestUpdate'
+# class RequestUpdate(models.Model):
+#     MaYC = models.CharField(max_length=50)
+#     MaNV = models.CharField(max_length=50)
+#     Ngay = models.DateField()
+#     Checkin = models.TimeField()
+#     updateCheckin = models.TimeField()
+#     Checkout = models.TimeField()
+#     updateCheckout = models.TimeField()
+#     NgayGui = models.DateTimeField()
+#     ChiTiet = models.CharField(max_length=50)
+#     TrangThai = models.CharField(max_length=50)
+#     NgayDuyet = models.DateTimeField()
+#     IDNguoiDuyet = models.CharField(max_length=50)
+#     class Meta:
+#         managed = False
+#         db_table = 'NV_RequestUpdate'

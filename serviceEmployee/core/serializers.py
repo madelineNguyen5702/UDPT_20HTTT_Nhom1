@@ -11,23 +11,23 @@ class DanhSachNhanVienQuanLySerializer(serializers.ModelSerializer):
         model = DanhSachNhanVienQuanLy
         fields = '__all__'
 
-class TimesheetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Timesheet
-        fields = '__all__'
+# class TimesheetSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Timesheet
+#         fields = '__all__'
 
 
-class RequestWFHSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestWFH
-        fields = '__all__'
+# class RequestWFHSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RequestWFH
+#         fields = '__all__'
 
-class RequestUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestUpdate
-        fields = '__all__'
+# class RequestUpdateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RequestUpdate
+#         fields = '__all__'
 
-class RequestLeaveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestLeave
-        fields = '__all__'
+# class RequestLeaveSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = RequestLeave
+#         fields = '__all__'
