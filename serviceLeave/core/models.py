@@ -48,7 +48,7 @@ class Timesheet(models.Model):
 
 
 class RequestLeave(models.Model):
-    MaYC = models.CharField(max_length=50)
+    # MaYC = models.CharField(max_length=50)
     MaNV = models.CharField(max_length=50)
     NgayGui = models.DateTimeField()
     NgayDuyet = models.DateTimeField()
@@ -61,7 +61,7 @@ class RequestLeave(models.Model):
         db_table = 'NV_RequestLeave'
 
 class RequestWFH(models.Model):
-    MaYC = models.CharField(max_length=50)
+    # MaYC = models.CharField(max_length=50)
     MaNV = models.CharField(max_length=50)
     NgayGui = models.DateTimeField()
     NgayDuyet = models.DateTimeField()
@@ -74,7 +74,7 @@ class RequestWFH(models.Model):
         db_table = 'NV_RequestWFH'
 
 class RequestUpdate(models.Model):
-    MaYC = models.CharField(max_length=50)
+    # MaYC = models.CharField(max_length=50)
     MaNV = models.CharField(max_length=50)
     Ngay = models.DateField()
     Checkin = models.TimeField()
