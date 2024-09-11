@@ -60,7 +60,7 @@
                 <option value="">Tất cả</option>
                 <option value="Nghỉ phép">Nghỉ phép</option>
                 <option value="WFH">WFH</option>
-                <option value="Timesheet">Timesheet</option>
+                <option value="Cập nhật Timesheet">Cập nhật Timesheet</option>
               </select>
             
               <label for="status-filter">Lọc theo tình trạng:</label>
@@ -103,6 +103,13 @@
               success: function (data) {
                 if (Array.isArray(data) && data.length > 0) {
                   data.forEach(request => {
+                    let dateDisplay;
+                    if (requestType === 'Nghỉ phép' || requestType === 'WFH') {
+                      dateDisplay = new Date(request.NgayRequest).toLocaleDateString('vi-VN');
+                    } else if (requestType === 'Cập nhật Timesheet') {
+                      dateDisplay = new Date(request.Ngay).toLocaleDateString('vi-VN');
+                    }
+          
                     let statusClass = '';
                     switch (request.TrangThai) {
                       case 'Đang chờ':
@@ -117,12 +124,12 @@
                       default:
                         statusClass = '';
                     }
-      
+          
                     let requestHTML = `
                       <div class="request" data-title="${requestType}" data-status="${request.TrangThai}">
                         <div class="request-info">
                           <h2>${requestType}</h2>
-                          <p>Ngày: ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
+                          <p>Ngày: ${dateDisplay}</p>
                         </div>
                         <div class="request-status ${statusClass}">${request.TrangThai || 'Đang chờ'}</div>
                       </div>
@@ -139,10 +146,11 @@
               }
             });
           }
+          
       
           fetchRequests("http://localhost:8000/leaveManagement/getRequestLeave/", "Nghỉ phép");
           fetchRequests("http://localhost:8000/WFHManagement/getRequestWFH/", "WFH");
-          fetchRequests("http://localhost:8000/timeManagement/getRequestUpdateTimesheet/", "Timesheet");
+          fetchRequests("http://localhost:8000/timeManagement/getRequestUpdateTimesheet/", "Cập nhật Timesheet");
       
           // Event listener for filters
           $('#title-filter, #status-filter').on('change', function () {
