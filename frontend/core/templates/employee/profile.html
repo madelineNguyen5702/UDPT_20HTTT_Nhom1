@@ -21,7 +21,7 @@
       <a href="/employee/home" class="navbar-brand">NTP</a>
     </div>
     <div class="header-right">
-      <span class="navbar-brand">Username</span>
+      {% comment %} <span class="navbar-brand">Username</span> {% endcomment %}
       <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
     </div>
   </header>
@@ -67,16 +67,20 @@
       </div>
       <script>
         $(document).ready(function () {
+          // Initial loading indicator
+          // $(".info-table td").text("");
+        
           // Hàm lấy giá trị từ cookie
           function getCookie(name) {
             let value = "; " + document.cookie;
             let parts = value.split("; " + name + "=");
             if (parts.length === 2) return parts.pop().split(";").shift();
           }
-      
+
+
           // Lấy MaNV từ cookie
           const MaNV = getCookie("MaNV");
-      
+        
           if (MaNV) {
             // Gọi API với MaNV từ cookie bằng phương thức POST
             $.ajax({
@@ -86,27 +90,40 @@
               data: JSON.stringify({ MaNV: MaNV }),  // Truyền MaNV vào body của POST request
               
               success: function (data) {
-                // Giả định data là một object với các trường tương ứng với thông tin nhân viên
-      
-                // Cập nhật thông tin lên giao diện
-                $("#name").text(data.HoTen);
-                $("#gender").text(data.GioiTinh);
-                $("#dob").text(data.NgaySinh);
-                $("#cccd").text(data.CCCD);
-                $("#phone").text(data.SDT);
-                $("#email").text(data.Email);
-                $("#tax_code").text(data.MaSoThue);
-                $("#address").text(data.DiaChi);
-                $("#bank_account").text(data.STK);
+                // console.log(data); // Hiển thị dữ liệu trả về trên console
+                
+                // Giả định data là một mảng với một đối tượng
+                if (Array.isArray(data) && data.length > 0) {
+                  const employee = data[0]; // Lấy đối tượng đầu tiên trong mảng
+        
+                  // Cập nhật thông tin lên giao diện
+                  $("#name").text(employee.HoTen);
+                  $("#gender").text(employee.GioiTinh);
+                  $("#dob").text(employee.NgaySinh);
+                  $("#cccd").text(employee.CCCD);
+                  $("#phone").text(employee.SDT);
+                  $("#email").text(employee.Email);
+                  $("#tax_code").text(employee.MaSoThue);
+                  $("#address").text(employee.DiaChi);
+                  $("#bank_account").text(employee.STK);
+                } else {
+                  console.error("Dữ liệu trả về không đúng định dạng.");
+                  alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+                  $(".info-table td").text("N/A");
+                }
               },
               error: function (xhr, status, error) {
                 console.error("Có lỗi xảy ra khi lấy thông tin nhân viên:", error);
+                alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+                $(".info-table td").text("N/A");
               },
             });
           } else {
             console.error("Không tìm thấy MaNV trong cookie.");
+            alert("Không tìm thấy mã nhân viên. Vui lòng đăng nhập lại.");
+            $(".info-table td").text("N/A");
           }
-        });
+        });      
       </script>
       
     </div>

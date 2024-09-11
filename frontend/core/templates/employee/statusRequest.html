@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,16 +18,16 @@
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
-  <header>
-    <div class="header-left">
-      <a href="/employee/home" class="navbar-brand">NTP</a>
-    </div>
-    <div class="header-right">
-      <span class="navbar-brand">Username</span>
-      <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
-    </div>
-  </header>
   <body>
+    <header>
+      <div class="header-left">
+        <a href="/employee/home" class="navbar-brand">NTP</a>
+      </div>
+      <div class="header-right">
+        <a href="../../login/" class="navbar-brand active-link">Đăng xuất</a>
+      </div>
+    </header>
+
     <div class="status-container">
       <!-- Sidebar -->
       <div class="msb" id="msb">
@@ -39,24 +39,10 @@
                 <i class="fa-solid fa-caret-down"></i>
               </a>
               <ul class="dropdown-menu">
-                <li>
-                  <a href="/employee/leave"
-                    ><i class="fa fa-calendar"></i>Nghỉ phép</a
-                  >
-                </li>
-                <li>
-                  <a href="/employee/wfh"><i class="fa fa-laptop"></i> WFH</a>
-                </li>
-                <li>
-                  <a href="/employee/timesheet/update"
-                    ><i class="fa fa-clock"></i> Timesheet</a
-                  >
-                </li>
-                <li>
-                  <a href="/employee/statusRequest"
-                    ><i class="fa fa-info-circle"></i><b> Tình trạng</b></a
-                  >
-                </li>
+                <li><a href="/employee/leave"><i class="fa fa-calendar"></i>Nghỉ phép</a></li>
+                <li><a href="/employee/wfh"><i class="fa fa-laptop"></i> WFH</a></li>
+                <li><a href="/employee/timesheet/update"><i class="fa fa-clock"></i> Timesheet</a></li>
+                <li><a href="/employee/statusRequest"><i class="fa fa-info-circle"></i><b> Tình trạng</b></a></li>
               </ul>
             </li>
           </ul>
@@ -67,36 +53,118 @@
       <div class="request-content">
         <h1>Tình trạng yêu cầu</h1>
 
-        <div class="request">
-          <div class="request-info">
-            <h2>Nghỉ phép</h2>
-            <p>Ngày: 05/09/2024</p>
-            <p>Lý do: Khám sức khỏe</p>
+          <div class="filter-status">
+            <div class="filter-container">
+              <label for="title-filter">Lọc theo loại yêu cầu:</label>
+              <select id="title-filter">
+                <option value="">Tất cả</option>
+                <option value="Nghỉ phép">Nghỉ phép</option>
+                <option value="WFH">WFH</option>
+                <option value="Timesheet">Timesheet</option>
+              </select>
+            
+              <label for="status-filter">Lọc theo tình trạng:</label>
+              <select id="status-filter">
+                <option value="">Tất cả</option>
+                <option value="Chờ">Chờ</option>
+                <option value="Chấp thuận">Chấp thuận</option>
+                <option value="Từ chối">Từ chối</option>
+              </select>
+            </div>
           </div>
-          <div class="request-status">Đang chờ</div>
-        </div>
-
-        <div class="request">
-          <div class="request-info">
-            <h2>Cập nhật time-sheet</h2>
-            <p>Ngày: 20/08/2024</p>
-            <p>Lý do: Thiếu ngày làm</p>
-          </div>
-          <div class="request-status">Bị từ chối</div>
         </div>
       </div>
-    </div>
-  </body>
-  <script>
-    $(document).ready(function () {
-      // Initially show the dropdown menu
-      $(".dropdown-menu").show();
 
-      // Toggle visibility on caret down click
-      $(".dropdown-toggle").click(function (e) {
-        e.preventDefault();
-        $(this).next(".dropdown-menu").slideToggle();
-      });
-    });
-  </script>
+    <script>
+      $(document).ready(function () {
+        
+        // Dropdown menu behavior
+        $(".dropdown-toggle").click(function (e) {
+          e.preventDefault();
+          $(this).next(".dropdown-menu").slideToggle();
+        });
+
+        
+        function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+      
+        const MaNV = getCookie("MaNV");
+      
+        if (MaNV) {
+          function fetchRequests(url, requestType) {
+            $.ajax({
+              url: url,
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ MaNV: MaNV }),
+              success: function (data) {
+                if (Array.isArray(data) && data.length > 0) {
+                  data.forEach(request => {
+                    let statusClass = '';
+                    switch (request.TrangThai) {
+                      case 'Đang chờ':
+                        statusClass = 'pending';
+                        break;
+                      case 'Đã duyệt':
+                        statusClass = 'approved';
+                        break;
+                      case 'Bị từ chối':
+                        statusClass = 'rejected';
+                        break;
+                      default:
+                        statusClass = '';
+                    }
+      
+                    let requestHTML = `
+                      <div class="request" data-title="${requestType}" data-status="${request.TrangThai}">
+                        <div class="request-info">
+                          <h2>${requestType}</h2>
+                          <p>Ngày: ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
+                        </div>
+                        <div class="request-status ${statusClass}">${request.TrangThai || 'Đang chờ'}</div>
+                      </div>
+                    `;
+                    $(".request-content").append(requestHTML);
+                  });
+                } else {
+                  $(".request-content").append(`<p>Không có yêu cầu nào được tìm thấy cho ${requestType}.</p>`);
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error(`Lỗi khi gọi API cho ${requestType}:`, status, error);
+                $(".request-content").append(`<p>Đã xảy ra lỗi khi tải dữ liệu cho ${requestType}.</p>`);
+              }
+            });
+          }
+      
+          fetchRequests("http://localhost:8000/leaveManagement/getRequestLeave/", "Nghỉ phép");
+          fetchRequests("http://localhost:8000/WFHManagement/getRequestWFH/", "WFH");
+          fetchRequests("http://localhost:8000/timeManagement/getRequestUpdateTimesheet/", "Timesheet");
+      
+          // Event listener for filters
+          $('#title-filter, #status-filter').on('change', function () {
+            const selectedTitle = $('#title-filter').val();
+            const selectedStatus = $('#status-filter').val();
+      
+            $('.request').each(function () {
+              const titleMatch = selectedTitle === '' || $(this).data('title') === selectedTitle;
+              const statusMatch = selectedStatus === '' || $(this).data('status') === selectedStatus;
+      
+              if (titleMatch && statusMatch) {
+                $(this).show();
+              } else {
+                $(this).hide();
+              }
+            });
+          });
+      
+        } else {
+          $(".request-content").append("<p>Không tìm thấy mã nhân viên trong cookie.</p>");
+        }
+      });      
+    </script>
+  </body>
 </html>
