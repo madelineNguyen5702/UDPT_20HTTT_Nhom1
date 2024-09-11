@@ -1,213 +1,132 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/styles1.css' %}" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles1.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Quản lý yêu cầu cập nhật timesheet</title>
-  </head>
-  <body>
-    <!-- Phần header sẽ được nạp từ file header.html -->
-    <header>
-      <div class="header-left">
-        <a href="../manager/home" class="navbar-brand">NTP</a>
-      </div>
-      <div class="header-right">
-        <span class="username">Username</span>
-        <a href="../logout" class="logout-btn">Đăng xuất</a>
-      </div>
-    </header>
-
-    <div class="container mt-4">
-      <h2 class="ttcn text-center mb-4">Quản lý yêu cầu cập nhật timesheet</h2>
-
-      <div class="row">
-        <!-- Sidebar chứa các liên kết điều hướng -->
-        <div class="col-md-3">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="../manager/leave">Nghỉ phép</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../manager/wfh">WFH</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="../manager/updateTimesheet"
-                >Cập nhật time-sheet</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <!-- Cột chứa thông tin cập nhật timesheet -->
-        <div class="col-md-9">
-          <div class="row">
-            <!-- Container-update thứ nhất -->
-            <div class="col-md-6">
-              <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
-                <div class="row mb-3">
-                  <div class="col">
-                    <p><strong>NV:</strong> Nhân viên 1</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="old-values">
-                      <p><strong>Giá trị cũ:</strong> 20/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 08:57:13</p>
-                      <p><strong>Thời gian check-out:</strong> 17:57:13</p>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="new-values">
-                      <p><strong>Giá trị mới:</strong> 20/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 08:57:13</p>
-                      <p><strong>Thời gian check-out:</strong> 18:57:13</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="separator my-3"></div>
-                <div class="row">
-                  <div class="buttons text-center">
-                    <button class="btn btn-reject mx-2">Từ chối</button>
-                    <button class="btn btn-outline-success mx-2">
-                      Chấp nhận
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Container-update thứ hai -->
-            <div class="col-md-6">
-              <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
-                <div class="row mb-3">
-                  <div class="col">
-                    <p><strong>NV:</strong> Nhân viên 2</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="old-values">
-                      <p><strong>Giá trị cũ:</strong> 21/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 09:15:00</p>
-                      <p><strong>Thời gian check-out:</strong> 18:00:00</p>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="new-values">
-                      <p><strong>Giá trị mới:</strong> 21/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 09:10:00</p>
-                      <p><strong>Thời gian check-out:</strong> 18:30:00</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="separator my-3"></div>
-                <div class="row">
-                  <div class="buttons text-center">
-                    <button class="btn btn-reject mx-2">Từ chối</button>
-                    <button class="btn btn-outline-success mx-2">
-                      Chấp nhận
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <!-- Container-update thứ ba -->
-            <div class="col-md-6">
-              <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
-                <div class="row mb-3">
-                  <div class="col">
-                    <p><strong>NV:</strong> Nhân viên 3</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="old-values">
-                      <p><strong>Giá trị cũ:</strong> 22/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 08:30:00</p>
-                      <p><strong>Thời gian check-out:</strong> 17:45:00</p>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="new-values">
-                      <p><strong>Giá trị mới:</strong> 22/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 08:35:00</p>
-                      <p><strong>Thời gian check-out:</strong> 17:55:00</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="separator my-3"></div>
-                <div class="row">
-                  <div class="buttons text-center">
-                    <button class="btn btn-reject mx-2">Từ chối</button>
-                    <button class="btn btn-outline-success mx-2">
-                      Chấp nhận
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Container-update thứ tư -->
-            <div class="col-md-6">
-              <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
-                <div class="row mb-3">
-                  <div class="col">
-                    <p><strong>NV:</strong> Nhân viên 4</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="old-values">
-                      <p><strong>Giá trị cũ:</strong> 23/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 09:00:00</p>
-                      <p><strong>Thời gian check-out:</strong> 18:00:00</p>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="new-values">
-                      <p><strong>Giá trị mới:</strong> 23/08/2024</p>
-                      <p><strong>Thời gian check-in:</strong> 09:05:00</p>
-                      <p><strong>Thời gian check-out:</strong> 18:15:00</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="separator my-3"></div>
-                <div class="row">
-                  <div class="buttons text-center">
-                    <button class="btn btn-reject mx-2">Từ chối</button>
-                    <button class="btn btn-outline-success mx-2">
-                      Chấp nhận
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <a href="../manager/home" class="navbar-brand">NTP</a>
     </div>
+    <div class="header-right">
+      <a href="../logout" class="logout-btn">Đăng xuất</a>
+    </div>
+  </header>
 
-    <!-- Bootstrap Bundle JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI"
-      crossorigin="anonymous"
-    ></script>
+  <h2 class="ttcn">Quản lý yêu cầu cập nhật timesheet</h2>
 
-  </body>
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Cột chứa nav-pills -->
+      <div class="col-md-3">
+        <ul class="nav nav-pills flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="../manager/leave">Nghỉ phép</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../manager/wfh">WFH</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="../manager/updateTimesheet">Cập nhật time-sheet</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Cột chứa thông tin cập nhật timesheet -->
+      <div class="col-md-9">
+        <div class="row" id="timesheet-container">
+          <!-- Nội dung sẽ được nạp tự động vào đây -->
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+    
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+          function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+          }
+  
+          const MaNV = getCookie("MaNV");
+          if (MaNV) {
+            function fetchTimesheetData() {
+                $.ajax({
+                    url: "http://localhost:8000/timeManagement/getRequestUpdateTimesheetManager/", 
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ MaNV: MaNV }), // Nếu cần truyền dữ liệu, có thể thay đổi ở đây
+                    success: function (data) {
+                        $("#timesheet-container").empty(); // Xóa nội dung cũ
+
+                        if (Array.isArray(data) && data.length > 0) {
+                          $("#updateTimesheet-requests").empty();
+                            data.forEach(item => {
+                                let timesheetHTML = `
+                                    <div class="col-md-6">
+                                        <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
+                                            <div class="row mb-3">
+                                                <div class="col">
+                                                    <p><strong>NV:</strong> ${item.MaNV}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="old-values">
+                                                        <p><strong>Giá trị cũ:</strong> ${item.Ngay}</p>
+                                                        <p><strong>Thời gian check-in:</strong> ${item.Checkin}</p>
+                                                        <p><strong>Thời gian check-out:</strong> ${item.Checkout}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="new-values">
+                                                        <p><strong>Giá trị mới:</strong> ${item.Ngay}</p>
+                                                        <p><strong>Thời gian check-in:</strong> ${item.updateCheckin}</p>
+                                                        <p><strong>Thời gian check-out:</strong> ${item.updateCheckout}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="separator my-3"></div>
+                                            <div class="row">
+                                                <div class="buttons text-center">
+                                                    <button class="btn btn-reject mx-2" data-id="${item.id}">Từ chối</button>
+                                                    <button class="btn btn-outline-success mx-2" data-id="${item.id}">Chấp nhận</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                $("#timesheet-container").append(timesheetHTML);
+                            });
+                        } else {
+                            $("#timesheet-container").append('<p>Không có yêu cầu cập nhật timesheet nào được tìm thấy.</p>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Lỗi khi gọi API:', status, error);
+                        $("#timesheet-container").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
+                    }
+                });
+            }
+          }
+
+            // Gọi hàm để nạp dữ liệu khi trang được tải
+          fetchTimesheetData();
+        });
+    </script>
+
+</body>
 </html>

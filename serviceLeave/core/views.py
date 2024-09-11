@@ -123,6 +123,19 @@ class TimesheetView(viewsets.ViewSet):
         except RequestUpdate.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
     #------------------------------------------------------------------------
+    @action(detail=False, methods=['post'], url_path='getRequestUpdateTimesheetManager')
+    def getRequestUpdateTimesheetManager(self, request):
+        manv = request.data.get('MaNV')
+        if not manv:
+            return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            queryset = RequestUpdate.objects.filter(IDNguoiDuyet=manv, TrangThai="Chờ")
+            serializer = RequestUpdateSerializer(queryset, many=True)
+            return Response(serializer.data)
+        except RequestUpdate.DoesNotExist:
+            return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
+    #------------------------------------------------------------------------
     @action(detail=False, methods=['post'], url_path='requestUpdateTimesheet')
     def requestUpdateTimesheet(self, request):
         manv = request.data.get('MaNV')

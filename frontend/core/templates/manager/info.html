@@ -1,50 +1,149 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin cá nhân</title>
+
     <link rel="stylesheet" href="{% static 'css/styles1.css' %}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      /* Custom CSS for table layout */
+      .info-table {
+        width: 60%; /* Giảm chiều rộng bảng */
+        border-collapse: collapse;
+        margin: 20px auto; /* Căn giữa bảng */
+      }
+      .info-table th,
+      .info-table td {
+        padding: 8px; /* Giảm padding */
+        border: 1px solid #ddd;
+      }
+      .info-table th {
+        text-align: left;
+        background-color: #f4f4f4;
+      }
+      .info-table td {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body class="info-body" id="info-body">
     <header>
-        <div class="header-left">
-          <a href="../manager/home" class="navbar-brand">NTP</a>
-        </div>
-        <div class="header-right">
-          <span class="username">Username</span>
-          <a href="../logout" class="logout-btn">Đăng xuất</a>
-        </div>
-      </header>
+      <div class="header-left">
+        <a href="../manager/home" class="navbar-brand">NTP</a>
+      </div>
+      <div class="header-right">
+        <a href="../logout" class="logout-btn">Đăng xuất</a>
+      </div>
+    </header>
 
-    <h2 class="ttcn">Thông tin cá nhân</h2>
+    <!-- Thông tin cá nhân -->
+    <main>
+      <h2 class="ttcn">Thông tin cá nhân</h2>
+      <table class="info-table">
+        <tbody id="profile-info">
+          <tr>
+            <th>Họ và tên:</th>
+            <td id="name"></td>
+          </tr>
+          <tr>
+            <th>Giới tính:</th>
+            <td id="gender"></td>
+          </tr>
+          <tr>
+            <th>Ngày sinh:</th>
+            <td id="dob"></td>
+          </tr>
+          <tr>
+            <th>CCCD:</th>
+            <td id="cccd"></td>
+          </tr>
+          <tr>
+            <th>Số điện thoại:</th>
+            <td id="phone"></td>
+          </tr>
+          <tr>
+            <th>Email:</th>
+            <td id="email"></td>
+          </tr>
+          <tr>
+            <th>MST:</th>
+            <td id="tax_code"></td>
+          </tr>
+          <tr>
+            <th>STK:</th>
+            <td id="bank_account"></td>
+          </tr>
+          <tr>
+            <th>Địa chỉ:</th>
+            <td id="address"></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
 
-    <!--
-    <ul class="list-group centered-list-group">
-        <li class="list-group-item">Họ và tên: <?php echo htmlspecialchars($user['ho_ten']); ?></li>
-        <li class="list-group-item">Giới tính: <?php echo htmlspecialchars($user['gioi_tinh']); ?></li>
-        <li class="list-group-item">Ngày sinh: <?php echo htmlspecialchars($user['ngay_sinh']); ?></li>
-        <li class="list-group-item">CCCD: <?php echo htmlspecialchars($user['cccd']); ?></li>
-        <li class="list-group-item">Số điện thoại: <?php echo htmlspecialchars($user['sdt']); ?></li>
-        <li class="list-group-item">Email: <?php echo htmlspecialchars($user['email']); ?></li>
-        <li class="list-group-item">MST: <?php echo htmlspecialchars($user['mst']); ?></li>
-        <li class="list-group-item">STK: <?php echo htmlspecialchars($user['stk']); ?></li>
-        <li class="list-group-item">Địa chỉ: <?php echo htmlspecialchars($user['dia_chi']); ?></li>
-    </ul>
-    -->
-    <ul class="list-group centered-list-group">
-        <li class="list-group-item"><strong>Họ và tên:</strong> Nguyễn Thị Hồng Ngọc </li>
-        <li class="list-group-item"><strong>Giới tính:</strong> Nữ</li>
-        <li class="list-group-item"><strong>Ngày sinh:</strong> 15/12/2002</li>
-        <li class="list-group-item"><strong>CCCD: </strong>070302124737</li>
-        <li class="list-group-item"><strong>Số điện thoại:</strong> 039 123 4567</li>
-        <li class="list-group-item"><strong>Email:</strong> nthn@ntp.com</li>
-        <li class="list-group-item"><strong>MST:</strong> 1024542455</li>
-        <li class="list-group-item"><strong>STK: </strong>1037458887 Vietcombank</li>
-        <li class="list-group-item"><strong>Địa chỉ: </strong>974 Nguyễn Trãi, phường 1, quận 5, TPHCM</li>
-    </ul>
-</body>
+    <script>
+      $(document).ready(function () {
+        // Hàm lấy giá trị từ cookie
+        function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        // Lấy MaNV từ cookie
+        const MaNV = getCookie("MaNV");
+
+        if (MaNV) {
+          // Gọi API với MaNV từ cookie bằng phương thức POST
+          $.ajax({
+            url: "http://localhost:8000/employeeService/getEmployeeInfo/",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ MaNV: MaNV }),  // Truyền MaNV vào body của POST request
+
+            success: function (data) {
+              console.log(data); // Hiển thị dữ liệu trả về trên console
+
+              // Giả định data là một mảng với một đối tượng
+              if (Array.isArray(data) && data.length > 0) {
+                const employee = data[0]; // Lấy đối tượng đầu tiên trong mảng
+
+                // Cập nhật thông tin lên giao diện
+                $("#name").text(employee.HoTen || 'N/A');
+                $("#gender").text(employee.GioiTinh || 'N/A');
+                $("#dob").text(employee.NgaySinh || 'N/A');
+                $("#cccd").text(employee.CCCD || 'N/A');
+                $("#phone").text(employee.SDT || 'N/A');
+                $("#email").text(employee.Email || 'N/A');
+                $("#tax_code").text(employee.MaSoThue || 'N/A');
+                $("#address").text(employee.DiaChi || 'N/A');
+                $("#bank_account").text(employee.STK || 'N/A');
+              } else {
+                console.error("Dữ liệu trả về không đúng định dạng.");
+                alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Có lỗi xảy ra khi lấy thông tin nhân viên:", error);
+              alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+            },
+          });
+        } else {
+          console.error("Không tìm thấy MaNV trong cookie.");
+          alert("Không tìm thấy mã nhân viên. Vui lòng đăng nhập lại.");
+        }
+      });
+    </script>
+  </body>
 </html>
+

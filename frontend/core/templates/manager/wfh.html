@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,12 +18,11 @@
         <a href="../manager/home" class="navbar-brand">NTP</a>
       </div>
       <div class="header-right">
-        <span class="username">Username</span>
         <a href="../logout" class="logout-btn">Đăng xuất</a>
       </div>
     </header>
 
-    <h2 class="ttcn">Quản lý yêu cầu wfh</h2>
+    <h2 class="ttcn">Quản lý yêu cầu WFH</h2>
 
     <div class="container mt-4">
       <div class="row">
@@ -34,96 +33,78 @@
               <a class="nav-link" href="../manager/leave">Nghỉ phép</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="../manager/wfh"
-                >WFH</a
-              >
+              <a class="nav-link active" aria-current="page" href="../manager/wfh">WFH</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../manager/updateTimesheet"
-                >Cập nhật time-sheet</a
-              >
+              <a class="nav-link" href="../manager/updateTimesheet">Cập nhật time-sheet</a>
             </li>
           </ul>
         </div>
 
         <!-- Cột chứa các info-box -->
         <div class="col-md-9">
-          <div class="row">
-            <!-- Khung thông tin wfh của Nhân viên 1 -->
-            <div class="col-md-4">
-              <div class="info-box">
-                <p><strong>NV:</strong> Nhân viên 1</p>
-                <p><strong>Ngày:</strong> 05/08/2024</p>
-                <div class="separator"></div>
-                <div class="d-flex justify-content-between">
-                  <!-- <button class="btn btn-danger">Từ chối</button> -->
-                  <button class="btn btn-reject">Từ chối</button>
-                  <button class="btn btn-outline-success">Chấp thuận</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Khung thông tin wfh của Nhân viên 2 -->
-            <div class="col-md-4">
-              <div class="info-box">
-                <p><strong>NV:</strong> Nhân viên 2</p>
-                <p><strong>Ngày:</strong> 30/08/2024</p>
-                <div class="separator"></div>
-                <div class="d-flex justify-content-between">
-                  <button class="btn btn-reject">Từ chối</button>
-                  <button class="btn btn-outline-success">Chấp thuận</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Khung thông tin wfh của Nhân viên 3 -->
-            <div class="col-md-4">
-              <div class="info-box">
-                <p><strong>NV:</strong> Nhân viên 3</p>
-                <p><strong>Ngày:</strong> 07/09/2024</p>
-                <div class="separator"></div>
-                <div class="d-flex justify-content-between">
-                  <button class="btn btn-reject">Từ chối</button>
-                  <button class="btn btn-outline-success">Chấp thuận</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Khung thông tin wfh của Nhân viên 4 -->
-            <div class="col-md-4">
-              <div class="info-box">
-                <p><strong>NV:</strong> Nhân viên 4</p>
-                <p><strong>Ngày:</strong> 10/09/2024</p>
-                <div class="separator"></div>
-                <div class="d-flex justify-content-between">
-                  <button class="btn btn-reject">Từ chối</button>
-                  <button class="btn btn-outline-success">Chấp thuận</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Khung thông tin wfh của Nhân viên 5 -->
-            <div class="col-md-4">
-              <div class="info-box">
-                <p><strong>NV:</strong> Nhân viên 5</p>
-                <p><strong>Ngày:</strong> 10/09/2024</p>
-                <div class="separator"></div>
-                <div class="d-flex justify-content-between">
-                  <button class="btn btn-reject">Từ chối</button>
-                  <button class="btn btn-outline-success">Chấp thuận</button>
-                </div>
-              </div>
-            </div>
+          <div class="row" id="wfh-requests">
+            <!-- Các khung thông tin wfh sẽ được thêm vào đây bởi JavaScript -->
           </div>
         </div>
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function () {
+        function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+        }
 
+        const MaNV = getCookie("MaNV");
+
+        if (MaNV) {
+          function fetchWfhRequests() {
+            $.ajax({
+              url: "http://localhost:8000/WFHManagement/getRequestWFHManager/",
+              type: "POST",
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              data: JSON.stringify({ MaNV: MaNV }),
+              success: function (data) {
+                if (Array.isArray(data) && data.length > 0) {
+                  $("#wfh-requests").empty(); // Clear previous content
+                  data.forEach(request => {
+                    let requestHTML = `
+                      <div class="col-md-4">
+                        <div class="info-box">
+                          <p><strong>NV:</strong> ${request.MaNV}</p>
+                          <p><strong>Ngày yêu cầu:</strong> ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
+                          <div class="separator"></div>
+                          <div class="d-flex justify-content-between">
+                            <button class="btn btn-reject" data-id="${request.id}">Từ chối</button>
+                            <button class="btn btn-outline-success" data-id="${request.id}">Chấp thuận</button>
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                    $("#wfh-requests").append(requestHTML);
+                  });
+                } else {
+                  $("#wfh-requests").append('<p>Không có yêu cầu WFH nào được tìm thấy.</p>');
+                }
+              },
+              error: function (xhr, status, error) {
+                console.error('Lỗi khi gọi API:', status, error);
+                $("#wfh-requests").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
+              }
+            });
+          }
+
+          fetchWfhRequests();
+        } else {
+          $("#wfh-requests").append("<p>Không tìm thấy mã nhân viên trong cookie.</p>");
+        }
+      });
+    </script>
   </body>
 </html>
