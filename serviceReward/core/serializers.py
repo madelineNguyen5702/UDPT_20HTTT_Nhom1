@@ -3,11 +3,23 @@ from .models import *
 
 from rest_framework import serializers
 
-class PointHistorySerializer(serializers.Serializer):
-    action = serializers.CharField()
-    point = serializers.IntegerField()
-    isUsed = serializers.BooleanField(required=False)
-    content = serializers.CharField(required=False)
-    provider = serializers.CharField(required=False)
-    getDate = serializers.DateField(required=False)
-    useDate = serializers.DateField(required=False, allow_null=True)
+class VoucherSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher
+        fields = '__all__'
+
+class NV_PointSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = NV_Point
+        fields = '__all__'
+
+class EmployeeVoucherSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeVoucher
+        fields = '__all__'
+
+class PointLogSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = PointLog
+        fields = '__all__'
+

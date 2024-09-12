@@ -165,10 +165,9 @@ cython_debug/
 mysql/
 db_employee/
 db_leave/
+db_reward/
 mysqlemployee/
 mysqlleave/
+mysqlreward/
 *.sql
 *.sql.gz
-
-# MongoDB
-data/

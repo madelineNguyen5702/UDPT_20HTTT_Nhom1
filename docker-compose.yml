@@ -1,19 +1,5 @@
 # docker compose --env-file .env.dev up --build
 services:
-  mongodb:
-    image: mongo:7.0
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodata:/data/db
-    networks:
-      - mynetwork
-
-
-
   kong-database:
     image: postgres:13
     container_name: kong-database
@@ -99,6 +85,24 @@ services:
     networks:
       - mynetwork
 
+  db_reward:
+    container_name: db_reward
+    image: mysql:8.0
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./db_reward:/var/lib/mysql
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${SQL_ROOT_PASSWORD}
+      - MYSQL_USER=${SQL_USER}
+      - MYSQL_PASSWORD=${SQL_PASSWORD}
+      - MYSQL_DATABASE=${SQL_DATABASE}
+    ports:
+      - 3308:3308
+    networks:
+      - mynetwork
+
   service_employee:
     container_name: service_employee
     build:
@@ -150,9 +154,9 @@ services:
     ports:
       - 8006:8006
     depends_on:
-      - db_employee
+      - db_reward
     links:
-      - db_employee
+      - db_reward
     networks:
       - mynetwork
 
@@ -211,13 +215,22 @@ services:
       - db_leave
     networks:
       - mynetwork
+
+  phpmyadmin-reward:
+    image: phpmyadmin/phpmyadmin
+    container_name: myadmin-reward
+    environment:
+      PMA_HOST: db_reward
+      MYSQL_ROOT_PASSWORD: ${SQL_ROOT_PASSWORD}
+    ports:
+      - "8082:80"
+    depends_on:
+      - db_reward
+    networks:
+      - mynetwork
 networks:
   default:
     external: true
     name: kong-net
   mynetwork:
     driver: bridge
-
-volumes:
-  mongodata:
-    driver: local
