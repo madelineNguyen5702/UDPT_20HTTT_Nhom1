@@ -1,33 +1,13 @@
 from rest_framework import serializers
 from .models import *
 
-class NhanVienSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NhanVien
-        fields = '__all__'
+from rest_framework import serializers
 
-class DanhSachNhanVienQuanLySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DanhSachNhanVienQuanLy
-        fields = '__all__'
-
-class TimesheetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Timesheet
-        fields = '__all__'
-
-
-class RequestWFHSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestWFH
-        fields = '__all__'
-
-class RequestUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestUpdate
-        fields = '__all__'
-
-class RequestLeaveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RequestLeave
-        fields = '__all__'
+class PointHistorySerializer(serializers.Serializer):
+    action = serializers.CharField()
+    point = serializers.IntegerField()
+    isUsed = serializers.BooleanField(required=False)
+    content = serializers.CharField(required=False)
+    provider = serializers.CharField(required=False)
+    getDate = serializers.DateField(required=False)
+    useDate = serializers.DateField(required=False, allow_null=True)

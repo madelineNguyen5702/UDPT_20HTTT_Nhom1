@@ -169,3 +169,6 @@ mysqlemployee/
 mysqlleave/
 *.sql
 *.sql.gz
+
+# MongoDB
+data/

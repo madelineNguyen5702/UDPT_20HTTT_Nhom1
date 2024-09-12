@@ -19,15 +19,9 @@ from .views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'managerViewList', DanhSachNhanVienQuanLyViewSet, basename='danhsachnhanvien')
-router.register(r'employeeService', EmployeeInfo, basename='thongtinnhanvien')
-router.register(r'timeManagement', TimesheetView, basename='timesheetManage')
-router.register(r'leaveManagement', LeaveView, basename='leaveManage')
-router.register(r'WFHManagement', WFHView, basename='WFHManage')
+router.register(r'employeeReward', EmployeePoint, basename='employeePoint')
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/employee/login/', LoginView.as_view(), name='login_view'),
-    path('api/check/', CheckNhanVienView.as_view(), name='check-nhanvien'),
     path('', include(router.urls)),
 ]
 

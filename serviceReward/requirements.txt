@@ -6,3 +6,4 @@ tzdata==2022.7
 djangorestframework
 django-cors-headers
 requests>=2.0.0,<3.0.0
+pymongo
