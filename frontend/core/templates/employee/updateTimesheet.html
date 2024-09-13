@@ -1,10 +1,10 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>YÊU CẦU LÀM VIỆC TỪ XA</title>
+    <title>YÊU CẦU CẬP NHẬT TIMESHEET</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -39,22 +39,16 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="/employee/leave"
-                    ><i class="fa fa-calendar"></i> Nghỉ phép</a
-                  >
+                  <a href="/employee/leave"><i class="fa fa-calendar"></i> Nghỉ phép</a>
                 </li>
                 <li>
-                  <a href="/employee/wfh"><i class="fa fa-laptop"></i> WFH </a>
+                  <a href="/employee/wfh"><i class="fa fa-laptop"></i> WFH</a>
                 </li>
                 <li>
-                  <a href="/employee/timesheet/update"
-                    ><i class="fa fa-clock"></i><b> Timesheet </b></a
-                  >
+                  <a href="/employee/timesheet/update"><i class="fa fa-clock"></i><b> Timesheet</b></a>
                 </li>
                 <li>
-                  <a href="/employee/statusRequest"
-                    ><i class="fa fa-info-circle"></i> Tình trạng</a
-                  >
+                  <a href="/employee/statusRequest"><i class="fa fa-info-circle"></i> Tình trạng</a>
                 </li>
               </ul>
             </li>
@@ -69,12 +63,12 @@
             <input type="date" id="from-date" name="from-date" class="input-date-time" />
           </div>
           <div class="form-group1">
-            <label for="checkin-hour">Thời gian check-in:</label>
-            <input type="text" id="checkin-hour" name="checkin-hour" class="input-date-time" placeholder="HH:MM:SS" />
+            <label for="checkin-hour-update">Thời gian check-in:</label>
+            <input type="text" id="checkin-hour-update" name="checkin-hour-update" class="input-date-time" placeholder="HH:MM:SS" />
           </div>
           <div class="form-group1">
             <label for="checkout-hour">Thời gian check-out:</label>
-            <input type="text" id="checkout-hour" name="checkout-hour" class="input-date-time" placeholder="HH:MM:SS" />
+            <input type="text" id="checkout-hour-update" name="checkout-hour-update" class="input-date-time" placeholder="HH:MM:SS" />
           </div>
         </form>
         <button type="submit" id="submit-timesheet">Gửi</button>
@@ -97,19 +91,106 @@
       });
     }
   
-    create24HourTimePicker('checkin-hour');
-    create24HourTimePicker('checkout-hour');
-
-    // 
+    create24HourTimePicker('checkin-hour-update');
+    create24HourTimePicker('checkout-hour-update');
+  
+    // Function to get value from cookie
+    function getCookie(name) {
+      let value = "; " + document.cookie;
+      let parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+  
     $(document).ready(function () {
       // Initially show the dropdown menu
       $(".dropdown-menu").show();
-
+  
       // Toggle visibility on caret down click
       $(".dropdown-toggle").click(function (e) {
         e.preventDefault();
         $(this).next(".dropdown-menu").slideToggle();
       });
+  
+      // Get MaNV from the cookie
+      const MaNV = getCookie("MaNV");
+  
+      // Check if MaNV is available
+      if (MaNV) {
+        // Function to fetch existing timesheet data
+        function fetchTimesheetData(date) {
+          return $.ajax({
+            url: 'http://localhost:8000/timeManagement/getTimesheet/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              MaNV: MaNV,
+              Ngay: date
+            })
+          }).then(function(response) {
+            // console.log('Fetched data:', response);
+  
+            // Check if there is any entry with the date matching 'date'
+            let matchingEntry = response.find(entry => entry.Ngay === date);
+            // console.log('Matching entry:', matchingEntry);
+            
+            if (matchingEntry) {
+              // Return the matching entry if found
+              return matchingEntry;
+            } else {
+              // Return an empty object or handle the case where no matching entry is found
+              return {};
+            }
+          }).catch(function(error) {
+            console.error('Có lỗi xảy ra khi lấy dữ liệu timesheet:', error);
+            return {};
+          });
+        }
+  
+        // Bind a click event to the submit button
+        $('#submit-timesheet').click(function (e) {
+          e.preventDefault(); // Prevent form submission
+  
+          // Get the date values from the input
+          const fromDate = $('#from-date').val();
+          const updateCheckin = $('#checkin-hour-update').val(); 
+          const updateCheckout = $('#checkout-hour-update').val(); 
+          const currentDate = new Date().toISOString().split('T')[0];
+  
+          // Fetch existing timesheet data and then send the update request
+          fetchTimesheetData(fromDate).done(function(matchingEntry) {
+            let originalCheckin = matchingEntry.Checkin || null;
+            let originalCheckout = matchingEntry.Checkout || null;
+  
+            // Make the AJAX POST request with MaNV and timesheet data
+            $.ajax({
+              url: 'http://localhost:8000/timeManagement/requestUpdateTimesheet/',
+              method: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({
+                MaNV: MaNV,
+                Ngay: fromDate,
+                Checkin: originalCheckin,
+                Checkout: originalCheckout,
+                updateCheckin: updateCheckin,
+                updateCheckout: updateCheckout,
+                NgayGui: currentDate,
+                TrangThai: "Chờ"
+              }),
+              success: function(response) {
+                console.log('Update success:', response);
+                // Handle success - show a message or redirect
+                alert('Yêu cầu cập nhật timesheet đã được gửi thành công!');
+              },
+              error: function(error) {
+                // Handle error - show a message or log the error
+                console.error('Có lỗi xảy ra khi gửi yêu cầu cập nhật timesheet:', error);
+              }
+            });
+          });
+        });
+      } else {
+        console.error('Không tìm thấy MaNV trong cookie.');
+      }
     });
   </script>
 </html>

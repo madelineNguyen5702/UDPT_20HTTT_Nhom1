@@ -87,12 +87,58 @@
     $(document).ready(function () {
       // Initially show the dropdown menu
       $(".dropdown-menu").show();
-
+  
       // Toggle visibility on caret down click
       $(".dropdown-toggle").click(function (e) {
         e.preventDefault();
         $(this).next(".dropdown-menu").slideToggle();
       });
+  
+      // Function to get value from cookie
+      function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+  
+      // Get MaNV from the cookie
+      const MaNV = getCookie("MaNV");
+  
+      // Check if MaNV is available
+      if (MaNV) {
+        // Bind a click event to the submit button
+        $('#wfh-button').click(function (e) {
+          e.preventDefault(); // Prevent form submission
+  
+          // Get the date values from the input
+          const fromDate = $('#from-date').val();
+          const currentDate = new Date().toISOString().split('T')[0];
+  
+          // Make the AJAX POST request with MaNV and date
+          $.ajax({
+            url: 'http://localhost:8000/WFHManagement/requestWFH/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              MaNV: MaNV,
+              NgayRequest: fromDate,
+              NgayGui: currentDate,
+              TrangThai: "Chờ"
+            }),
+            success: function(response) {
+              // Handle success - show a message or redirect
+              alert('Yêu cầu WFH đã được gửi thành công!');
+            },
+            error: function(error) {
+              // Handle error - show a message or log the error
+              console.error('Có lỗi xảy ra khi gửi yêu cầu WFH:', error);
+            }
+          });
+        });
+      } else {
+        console.error('Không tìm thấy MaNV trong cookie.');
+      }
     });
   </script>
+  
 </html>

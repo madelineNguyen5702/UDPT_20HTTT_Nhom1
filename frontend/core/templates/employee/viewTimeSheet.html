@@ -60,16 +60,6 @@
     </button>
   </body>
   <script>
-    // Nạp header.html vào phần header-placeholder
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("../components/header.html")
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("header-placeholder").innerHTML = data;
-        })
-        .catch((error) => console.error("Error loading header:", error));
-    });
-
     // Tạo lịch
     document.addEventListener("DOMContentLoaded", function () {
       const monthYear = document.getElementById("month-year");
@@ -94,10 +84,11 @@
 
       let currentDate = new Date();
       let today = new Date();
-      const startWork = new Date("2024-01-01");
+      //const startWork = new Date("2024-08-01");
+      const startWork = new Date();
 
-      const holidays = ["2024-08-19"]; // Ngày nghỉ
-      const wfhDays = ["2024-08-14", "2024-08-15", "2024-08-16"]; // Ngày WFH
+      const holidays = []; // Ngày nghỉ
+      const wfhDays = []; // Ngày WFH
 
       function renderCalendar(date) {
         const year = date.getFullYear();

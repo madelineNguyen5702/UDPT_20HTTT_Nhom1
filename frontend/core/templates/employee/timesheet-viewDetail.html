@@ -14,6 +14,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <header>
     <div class="header-left">
@@ -44,50 +45,106 @@
         const urlParams = new URLSearchParams(window.location.search);
         const selectedDate = urlParams.get("date");
         const date = new Date(selectedDate);
-
+    
         // Định dạng ngày theo kiểu "Ngày 20 Tháng 8, 2024"
         const options = { day: "numeric", month: "long", year: "numeric" };
         const formattedDate = date.toLocaleDateString("vi-VN", options);
-
+    
         document.getElementById("selected-date").textContent = formattedDate;
-
-        // Giả sử đã tải dữ liệu từ cơ sở dữ liệu và có dữ liệu mẫu
-        const timesheetData = {
-          checkIn: "07:57:13",
-          checkOut: "17:12:51",
-        };
-
-        // Tạo nội dung timesheet
-        const timesheetContent = `
-                <div class="timesheet-info">
-                    <strong>Ngày:</strong> ${formattedDate}
-                </div>
-                <div class="timesheet-info">
-                    <strong>Thời gian check-in:</strong> ${timesheetData.checkIn}
-                </div>
-                <div class="timesheet-info">
-                    <strong>Thời gian check-out:</strong> ${timesheetData.checkOut}
-                </div>
-            `;
-
-        // Hiển thị nội dung timesheet
-        document.getElementById("timesheet-content").innerHTML =
-          timesheetContent;
-
+    
+        // Hàm lấy giá trị từ cookie
+        function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+    
+        // Lấy MaNV từ cookie
+        const MaNV = getCookie("MaNV");
+    
+        if (MaNV) {
+          // Gọi API với MaNV từ cookie bằng phương thức POST
+          $.ajax({
+            url: "http://localhost:8000/timeManagement/getTimesheet/",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ MaNV: MaNV, Ngay: selectedDate }), // Truyền MaNV và Ngay vào body của POST request
+            
+            success: function (data) {
+              // console.log(data); // Hiển thị dữ liệu trả về trên console
+              
+              // Giả định data là một mảng với một đối tượng
+              if (Array.isArray(data) && data.length > 0) {
+                const timesheet = data.find(entry => entry.Ngay === selectedDate);
+                
+                if (timesheet) {
+                  const timesheetData = {
+                    checkIn: timesheet.Checkin,
+                    checkOut: timesheet.Checkout,
+                  };
+                  console.log(timesheetData);
+                  
+                  // Create timesheet content
+                  const timesheetContent = `
+                    <div class="timesheet-info">
+                        <strong>Ngày:</strong> ${formattedDate}
+                    </div>
+                    <div class="timesheet-info">
+                        <strong>Thời gian check-in:</strong> ${timesheetData.checkIn}
+                    </div>
+                    <div class="timesheet-info">
+                        <strong>Thời gian check-out:</strong> ${timesheetData.checkOut}
+                    </div>
+                  `;
+                  
+                  document.getElementById("timesheet-content").innerHTML = timesheetContent;
+                } else {
+                  // No entry for the selected date
+                  const noInfoContent = `
+                    <div class="timesheet-info">
+                        <strong>Ngày:</strong> ${formattedDate}
+                    </div>
+                    <div class="timesheet-info">
+                        Không có thông tin
+                    </div>
+                  `;
+                  
+                  document.getElementById("timesheet-content").innerHTML = noInfoContent;
+                }
+    
+              } else {
+                console.error("Dữ liệu trả về không đúng định dạng.");
+                alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+                $(".info-table td").text("N/A");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Có lỗi xảy ra khi lấy thông tin của nhân viên:", error);
+              alert("Không thể tải thông tin nhân viên. Vui lòng thử lại sau.");
+              $(".info-table td").text("N/A");
+            },
+          });
+        } else {
+          console.error("Không tìm thấy MaNV trong cookie.");
+          alert("Không tìm thấy mã nhân viên. Vui lòng đăng nhập lại.");
+          $(".info-table td").text("N/A");
+        }
+    
         // Thêm sự kiện cho nút "Quay lại"
         document
           .getElementById("back-btn")
           .addEventListener("click", function () {
             window.location.href = "/employee/timesheet"; // Chuyển hướng đến trang viewTimesheet.html
           });
-
+    
         // Thêm sự kiện cho nút "Cập nhật"
         document
           .getElementById("upt-btn")
           .addEventListener("click", function () {
-            window.location.href = "/employee/timesheet/update"; // Chuyển hướng đến trang viewTimesheet.html
+            window.location.href = "/employee/timesheet/update"; // Chuyển hướng đến trang updateTimesheet.html
           });
       });
     </script>
+    
   </body>
 </html>
