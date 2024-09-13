@@ -32,7 +32,7 @@ class PointLog(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'NV_Point'
+        db_table = 'PointLog'
 
 class EmployeeVoucher(models.Model):
     MaNV = models.CharField(max_length=50)

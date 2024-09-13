@@ -19,7 +19,10 @@ from .views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'employeeReward', EmployeePoint, basename='employeePoint')
+router.register(r'employeePoint', EmployeePointView, basename='employeePoint')
+router.register(r'employeeVoucher', EmployeeVoucherView, basename='employeeVoucher')
+router.register(r'pointLog', PointLogView, basename='pointlog')
+router.register(r'Voucher', VoucherView, basename='voucher')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
