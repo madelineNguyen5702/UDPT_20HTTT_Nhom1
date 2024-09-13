@@ -68,13 +68,17 @@
             <label for="from-date">Ngày:</label>
             <input type="date" id="from-date" name="from-date" />
           </div>
-          {% comment %} <div class="form-group">
+          {% comment %}
+          <div class="form-group">
             <label for="to-date">Đến:</label>
             <input type="date" id="to-date" name="to-date" />
-          </div> {% endcomment %}
+          </div>
+          {% endcomment %}
           <div class="form-group">
             <label for="reason">Lý do:</label>
-            <textarea id="reason" name="reason" rows="4">Khám sức khỏe</textarea>
+            <textarea id="reason" name="reason" rows="4">
+Khám sức khỏe</textarea
+            >
           </div>
         </form>
         <button type="submit" id="leave-submit">Gửi</button>
@@ -105,36 +109,37 @@
       // Check if MaNV is available
       if (MaNV) {
         // Bind a click event to the submit button
-        $('#leave-submit').click(function (e) {
+        $("#leave-submit").click(function (e) {
           e.preventDefault(); // Prevent form submission
 
           // Get the date values from the input
-          const fromDate = $('#from-date').val();
-          const currentDate = new Date().toISOString().split('T')[0];
+          const fromDate = $("#from-date").val();
+          const currentDate = new Date().toISOString().split("T")[0];
 
           // Make the AJAX POST request with MaNV and date
           $.ajax({
-            url: 'http://localhost:8000/leaveManagement/requestLeave/',
-            method: 'POST',
-            contentType: 'application/json',
+            url: "http://localhost:8000/leaveManagement/requestLeave/",
+            method: "POST",
+            contentType: "application/json",
             data: JSON.stringify({
               MaNV: MaNV,
               NgayRequest: fromDate,
               NgayGui: currentDate,
-              TrangThai: "Chờ"
+              TrangThai: "Chờ",
+              IDNguoiDuyet: "QL01",
             }),
-            success: function(response) {
+            success: function (response) {
               // Handle success - show a message or redirect
-              alert('Yêu cầu nghỉ phép đã được gửi thành công!');
+              alert("Yêu cầu nghỉ phép đã được gửi thành công!");
             },
-            error: function(error) {
+            error: function (error) {
               // Handle error - show a message or log the error
-              console.error('Có lỗi xảy ra khi gửi yêu cầu nghỉ phép:', error);
-            }
+              console.error("Có lỗi xảy ra khi gửi yêu cầu nghỉ phép:", error);
+            },
           });
         });
       } else {
-        console.error('Không tìm thấy MaNV trong cookie.');
+        console.error("Không tìm thấy MaNV trong cookie.");
       }
     });
   </script>

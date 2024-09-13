@@ -244,20 +244,21 @@ class TimesheetView(viewsets.ViewSet):
             for i in updated_data:
                 newCheckIn = i.updateCheckin
                 newCheckOut = i.updateCheckout
-            try:
-                print("Update Timesheet")
-                # Cập nhật bản ghi Timesheet
-                querysett = Timesheet.objects.filter(MaNV=manv, Ngay=ngay)
-                num_updated = querysett.update(
-                    Checkin=newCheckIn,
-                    Checkout=newCheckOut
-                )
+            if trangthaimoi == 'Chấp thuận':
+                try:
+                    print("Update Timesheet")
+                    # Cập nhật bản ghi Timesheet
+                    querysett = Timesheet.objects.filter(MaNV=manv, Ngay=ngay)
+                    num_updated = querysett.update(
+                        Checkin=newCheckIn,
+                        Checkout=newCheckOut
+                    )
 
-                if num_updated == 0:
-                    return Response({'message': 'Không có bản ghi nào được cập nhật trong Timesheet'}, status=status.HTTP_404_NOT_FOUND)
+                    if num_updated == 0:
+                        return Response({'message': 'Không có bản ghi nào được cập nhật trong Timesheet'}, status=status.HTTP_404_NOT_FOUND)
 
-            except Exception as e:
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                except Exception as e:
+                    return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             serializer = RequestUpdateSerializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
