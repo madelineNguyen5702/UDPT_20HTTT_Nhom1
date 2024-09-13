@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from django.contrib.sessions.models import Session
 from .serializers import *
 
-class EmployeeVoucher(viewsets.ViewSet):
+class EmployeeVoucherView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='getEmployeeVoucher')
     def getEmployeeVoucher(self, request):
         manv = request.data.get('MaNV')
@@ -41,22 +41,21 @@ class EmployeeVoucher(viewsets.ViewSet):
 
             # Trả về dữ liệu của bản ghi mới
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except EmployeeVoucherSerializers.DoesNotExist:
+        except EmployeeVoucher.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
         
 
-class EmployeePoint(viewsets.ViewSet):
+class EmployeePointView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='getEmployeePoint')
     def getEmployeePoint(self, request):
         manv = request.data.get('MaNV')
-        if not manv:
-            return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             queryset = NV_Point.objects.filter(MaNV=manv)
+            print("done")
             serializer = NV_PointSerializers(queryset, many=True)
             return Response(serializer.data)
-        except NV_PointSerializers.DoesNotExist:
+        except NV_Point.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
         
     @action(detail=False, methods=['post'], url_path='updatePoint')
@@ -92,7 +91,7 @@ class EmployeePoint(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='updateVoucher')
     def updateVoucher(self, request):
         manv = request.data.get('MaNV')
-        point = request.data.get('Voucher')
+        tongvoucher = request.data.get('TongVoucher')
         if not manv:
             return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -100,7 +99,7 @@ class EmployeePoint(viewsets.ViewSet):
             queryset = NV_Point.objects.filter(MaNV=manv)
             # Cập nhật bản ghi
             num_updated = queryset.update(
-                TongVoucher= point
+                TongVoucher= tongvoucher
             )
 
             if num_updated == 0:
@@ -116,11 +115,11 @@ class EmployeePoint(viewsets.ViewSet):
 
             # Trả về dữ liệu sau khi cập nhật
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except NV_PointSerializers.DoesNotExist:
+        except NV_Point.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
         
 
-class PointLog(viewsets.ViewSet):
+class PointLogView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='getPointLog')
     def getPointLog(self, request):
         manv = request.data.get('MaNV')
@@ -131,7 +130,7 @@ class PointLog(viewsets.ViewSet):
             queryset = PointLog.objects.filter(MaNV=manv)
             serializer = PointLogSerializers(queryset, many=True)
             return Response(serializer.data)
-        except PointLogSerializers.DoesNotExist:
+        except PointLog.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
         
     @action(detail=False, methods=['post'], url_path='managerSendPoint')
@@ -185,7 +184,7 @@ class PointLog(viewsets.ViewSet):
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
         
 
-class Voucher(viewsets.ViewSet):
+class VoucherView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='getVoucher')
     def getVoucher(self, request):
         try:
