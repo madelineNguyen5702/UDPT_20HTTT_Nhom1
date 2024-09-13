@@ -192,7 +192,6 @@ class TimesheetView(viewsets.ViewSet):
         updatecheckout = request.data.get('updateCheckout')  # Thay đổi chỗ này
         trangthaimoi = request.data.get('TrangThai')
         idnguoiduyet = request.data.get('IDNguoiDuyet')
-
         if not manv or not ngay or not idnguoiduyet:
             return Response({'error': 'MaNV, Ngay, và IDNguoiDuyet là bắt buộc'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -235,21 +234,23 @@ class TimesheetView(viewsets.ViewSet):
 
             # Cập nhật bản ghi RequestUpdate
             num_updated = queryset.update(
-                Checkin=updatecheckin,
-                Checkout=updatecheckout,
                 TrangThai=trangthaimoi,
                 NgayDuyet=ngayduyet,
             )
 
             if num_updated == 0:
                 return Response({'message': 'Không có bản ghi nào được cập nhật'}, status=status.HTTP_404_NOT_FOUND)
-
+            updated_data = RequestUpdate.objects.filter(MaNV=manv, Ngay=ngay)
+            for i in updated_data:
+                newCheckIn = i.updateCheckin
+                newCheckOut = i.updateCheckout
             try:
+                print("Update Timesheet")
                 # Cập nhật bản ghi Timesheet
                 querysett = Timesheet.objects.filter(MaNV=manv, Ngay=ngay)
                 num_updated = querysett.update(
-                    Checkin=updatecheckin,
-                    Checkout=updatecheckout
+                    Checkin=newCheckIn,
+                    Checkout=newCheckOut
                 )
 
                 if num_updated == 0:
