@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'managerViewList', DanhSachNhanVienQuanLyViewSet, basename='danhsachnhanvien')
 router.register(r'employeeService', EmployeeInfo, basename='thongtinnhanvien')
+router.register(r'employeeActivity', EmployeeActivity, basename='employeeactivity')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/employee/login/', LoginView.as_view(), name='login_view'),

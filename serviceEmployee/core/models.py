@@ -33,6 +33,25 @@ class DanhSachNhanVienQuanLy(models.Model):
     class Meta:
         managed = False
         db_table = 'NV_QL'
+        
+class HoatDongNhanVien(models.Model):
+    MaNV = models.CharField(max_length=50)
+    client_id = models.CharField(max_length=255)
+    client_secret = models.CharField(max_length=255)
+    access_token = models.CharField(max_length=255)
+    refresh_token = models.CharField(max_length=255)
+    # activity_id = models.IntegerField()
+    # name = models.CharField(max_length=255)
+    # type = models.CharField(max_length=50)
+    # start_date = models.DateTimeField()
+    # distance = models.FloatField()
+    # moving_time = models.IntegerField()
+    # elapsed_time = models.IntegerField()
+    # Add other fields as needed
+
+    class Meta:
+        managed = False
+        db_table = 'StravaCredentials'
 
 # class Timesheet(models.Model):
 #     Ngay = models.DateField()

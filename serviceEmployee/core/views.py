@@ -6,6 +6,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from django.contrib.sessions.models import Session
 from .serializers import *
+import requests
 
 class LoginView(APIView):
     def get(self, request):
@@ -75,4 +76,44 @@ class EmployeeInfo(viewsets.ViewSet):
             return Response(serializer.data)
         except NhanVien.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
- 
+
+class EmployeeActivity(viewsets.ViewSet):
+    @action(detail=False, methods=['post'], url_path='getEmployeeActivity')
+    def getEmployeeActivity(self, request):
+        ma_nv = request.data.get('MaNV')
+        print(f"Received MaNV: {ma_nv}")  # Debugging: print MaNV to check if it's being received correctly
+        if not ma_nv:
+            return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Lấy thông tin từ bảng StravaCredentials
+        try:
+            credentials = HoatDongNhanVien.objects.get(MaNV=ma_nv)
+            print(f"Retrieved token: {credentials.refresh_token}")  # Debugging: print token to check its value
+        except HoatDongNhanVien.DoesNotExist:
+            return Response({'error': 'Credentials not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Lấy access token từ refresh token
+        try:
+            access_token = credentials.access_token
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Gọi Strava API để lấy hoạt động
+        url = "https://www.strava.com/api/v3/athlete/activities"
+        headers = {
+            "Authorization": f"Bearer {access_token}"  # Sử dụng access_token thay vì refresh_token
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            data = response.json()
+            return Response(data)
+        except requests.exceptions.HTTPError as http_err:
+            print(f"HTTP error occurred: {http_err}")
+            return Response({'error': f'HTTP error occurred: {http_err}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except requests.exceptions.RequestException as req_err:
+            print(f"Error occurred: {req_err}")
+            return Response({'error': f'Error occurred: {req_err}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+

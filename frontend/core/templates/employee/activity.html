@@ -26,7 +26,8 @@
   <body class="activity-body" id="activity-body">
     <h1>Hoạt Động</h1>
     <div class="activity-container">
-      <div class="activity-block">
+      <!-- Các hoạt động sẽ được thêm vào đây bởi JavaScript -->
+      {% comment %} <div class="activity-block">
         <div class="activity-date">Ngày: 8/8/2024</div>
         <div class="activity-type">CHẠY BỘ</div>
         <div class="activity-details">
@@ -41,9 +42,9 @@
             Calories: 200kcal
           </div>
         </div>
-      </div>
+      </div> {% endcomment %}
 
-      <div class="activity-block">
+      {% comment %} <div class="activity-block">
         <div class="activity-date">Ngày: 7/8/2024</div>
         <div class="activity-type">CHẠY BỘ</div>
         <div class="activity-details">
@@ -58,7 +59,82 @@
             Calories: 197kcal
           </div>
         </div>
-      </div>
+      </div> {% endcomment %}
     </div>
   </body>
+  <script>
+    $(document).ready(function () {
+      // Function to get the value of a specific cookie
+      function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+  
+      // Get MaNV from the cookie
+      const MaNV = getCookie("MaNV");
+  
+      if (MaNV) {
+          // Call the API with MaNV via POST method
+          $.ajax({
+              url: "http://localhost:8000/employeeActivity/getEmployeeActivity/",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ MaNV: MaNV }),  // Pass MaNV in the request body
+  
+              success: function (data) {
+                  console.log(data);  // Moved console.log here
+  
+                  const container = $(".activity-container");
+                  container.empty();  // Clear existing content
+  
+                  data.forEach(activity => {
+                      const date = new Date(activity.start_date_local);
+                      const dateStr = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                      const timeStr = `${date.getHours()}h${date.getMinutes()}`;
+                      const distance = (activity.distance / 1000).toFixed(2);  // Convert meters to kilometers
+                      const movingTime = formatTime(activity.moving_time);
+                      const averageSpeed = (activity.average_speed * 3.6).toFixed(2);  // Convert m/s to km/h
+  
+                      const activityHtml = `
+                          <div class="activity-block">
+                              <div class="activity-date">Ngày: ${dateStr}</div>
+                              <div class="activity-type">${activity.sport_type.toUpperCase()}</div>
+                              <div class="activity-details">
+                                  <div class="activity-time">${timeStr}</div>
+                                  {% comment %} <div class="activity-button">
+                                      <button>Xem chi tiết</button>
+                                  </div> {% endcomment %}
+                                  <div class="activity-stats">
+                                      Quãng đường: ${distance} km<br />
+                                      Thời gian: ${movingTime}<br />
+                                      Vận tốc trung bình: ${averageSpeed} km/h<br />
+                                      Calories: ${activity.kudos_count * 10} kcal
+                                  </div>
+                              </div>
+                          </div>
+                      `;
+  
+                      container.append(activityHtml);
+                  });
+              },
+  
+              error: function (xhr, status, error) {
+                  console.error('Error fetching data from API:', error);
+                  $(".activity-container").html('<p>Error fetching data.</p>');
+              }
+          });
+      } else {
+          $(".activity-container").html('<p>Cookie MaNV not found.</p>');
+      }
+  
+      // Function to format seconds into minutes and seconds
+      function formatTime(seconds) {
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          return `${mins}p ${secs}s`;
+      }
+  });
+  </script>
+  
 </html>

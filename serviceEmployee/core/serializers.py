@@ -10,6 +10,12 @@ class DanhSachNhanVienQuanLySerializer(serializers.ModelSerializer):
     class Meta:
         model = DanhSachNhanVienQuanLy
         fields = '__all__'
+        
+
+class HoatDongNhanVienSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HoatDongNhanVien
+        fields = '__all__'
 
 # class TimesheetSerializer(serializers.ModelSerializer):
 #     class Meta:
