@@ -47,86 +47,146 @@
     </div>
   </div>
 
-    
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI" crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function () {
-          function getCookie(name) {
-            let value = "; " + document.cookie;
-            let parts = value.split("; " + name + "=");
-            if (parts.length === 2) return parts.pop().split(";").shift();
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Include Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-Q/GA2cXzXqNptBt+AFI0trgtz3+n6Y7kgQSRmiqhMyfKDO7Zcz6cl6FZmo2k3dxI" crossorigin="anonymous"></script>
+  <script>
+
+    $(document).ready(function () {
+      function getCookie(name) {
+          let value = "; " + document.cookie;
+          let parts = value.split("; " + name + "=");
+          if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+  
+      const MaNV_Cookie = getCookie("MaNV");
+      if (MaNV_Cookie) {
+          function fetchTimesheetData() {
+              $.ajax({
+                  url: "http://localhost:8000/timeManagement/getRequestUpdateTimesheetManager/",
+                  type: "POST",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  data: JSON.stringify({ MaNV: MaNV_Cookie }),
+                  success: function (data) {
+                      $("#timesheet-container").empty(); // Xóa nội dung cũ
+  
+                      if (Array.isArray(data) && data.length > 0) {
+                          $("#updateTimesheet-requests").empty();
+                          data.forEach(item => {
+                              let timesheetHTML = `
+                                  <div class="col-md-6">
+                                      <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
+                                          <div class="row mb-3">
+                                              <div class="col">
+                                                  <p><strong>NV:</strong> ${item.MaNV}</p>
+                                              </div>
+                                          </div>
+                                          <div class="row">
+                                              <div class="col">
+                                                  <div class="old-values">
+                                                      <p><strong>Giá trị cũ:</strong> ${item.Ngay}</p>
+                                                      <p><strong>Thời gian check-in:</strong> ${item.Checkin}</p>
+                                                      <p><strong>Thời gian check-out:</strong> ${item.Checkout}</p>
+                                                  </div>
+                                              </div>
+                                              <div class="col">
+                                                  <div class="new-values">
+                                                      <p><strong>Giá trị mới:</strong> ${item.Ngay}</p>
+                                                      <p><strong>Thời gian check-in:</strong> ${item.updateCheckin}</p>
+                                                      <p><strong>Thời gian check-out:</strong> ${item.updateCheckout}</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="separator my-3"></div>
+                                          <div class="row">
+                                              <div class="buttons text-center">
+                                                  <button class="btn btn-reject mx-2" data-id="${item.id}" data-nv="${item.MaNV}" data-ngay="${item.Ngay}">Từ chối</button>
+                                                  <button class="btn btn-outline-success mx-2" data-id="${item.id}" data-nv="${item.MaNV}" data-ngay="${item.Ngay}">Chấp nhận</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              `;
+                              $("#timesheet-container").append(timesheetHTML);
+                          });
+                      } else {
+                          $("#timesheet-container").append('<p>Không có yêu cầu cập nhật timesheet nào được tìm thấy.</p>');
+                      }
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('Lỗi khi gọi API:', status, error);
+                      $("#timesheet-container").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
+                  }
+              });
           }
   
-          const MaNV = getCookie("MaNV");
-          if (MaNV) {
-            function fetchTimesheetData() {
-                $.ajax({
-                    url: "http://localhost:8000/timeManagement/getRequestUpdateTimesheetManager/", 
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: JSON.stringify({ MaNV: MaNV }), // Nếu cần truyền dữ liệu, có thể thay đổi ở đây
-                    success: function (data) {
-                        $("#timesheet-container").empty(); // Xóa nội dung cũ
-
-                        if (Array.isArray(data) && data.length > 0) {
-                          $("#updateTimesheet-requests").empty();
-                            data.forEach(item => {
-                                let timesheetHTML = `
-                                    <div class="col-md-6">
-                                        <div class="container-update p-3 bg-light rounded shadow-sm mb-4">
-                                            <div class="row mb-3">
-                                                <div class="col">
-                                                    <p><strong>NV:</strong> ${item.MaNV}</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="old-values">
-                                                        <p><strong>Giá trị cũ:</strong> ${item.Ngay}</p>
-                                                        <p><strong>Thời gian check-in:</strong> ${item.Checkin}</p>
-                                                        <p><strong>Thời gian check-out:</strong> ${item.Checkout}</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="new-values">
-                                                        <p><strong>Giá trị mới:</strong> ${item.Ngay}</p>
-                                                        <p><strong>Thời gian check-in:</strong> ${item.updateCheckin}</p>
-                                                        <p><strong>Thời gian check-out:</strong> ${item.updateCheckout}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="separator my-3"></div>
-                                            <div class="row">
-                                                <div class="buttons text-center">
-                                                    <button class="btn btn-reject mx-2" data-id="${item.id}">Từ chối</button>
-                                                    <button class="btn btn-outline-success mx-2" data-id="${item.id}">Chấp nhận</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                $("#timesheet-container").append(timesheetHTML);
-                            });
-                        } else {
-                            $("#timesheet-container").append('<p>Không có yêu cầu cập nhật timesheet nào được tìm thấy.</p>');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Lỗi khi gọi API:', status, error);
-                        $("#timesheet-container").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
-                    }
-                });
-            }
+          function handleWFHRequest(requestId, status, MaNV, NgayRequest) {
+              const today = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+              console.log("NgayDuyet (client-side):", today); // Log the date
+              
+              $.ajax({
+                url: "http://localhost:8000/timeManagement/handleRequestUpdateTimesheet/",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    MaNV: MaNV,
+                    Ngay: NgayRequest,  // Điều chỉnh tên trường để phù hợp
+                    updateCheckin: '',  // Nếu không thay đổi, để trống hoặc loại bỏ
+                    updateCheckout: '',  // Nếu không thay đổi, để trống hoặc loại bỏ
+                    TrangThai: status,
+                    NgayDuyet: today,  // Ngày duyệt hiện tại
+                    IDNguoiDuyet: MaNV_Cookie
+                }),
+                success: function (response) {
+                    alert(`Yêu cầu đã được ${status.toLowerCase()} thành công.`);
+                    fetchTimesheetData(); // Refresh the list
+                },
+                error: function (xhr, status, error) {
+                    console.error('Lỗi khi cập nhật yêu cầu:', status, error);
+                    alert(`Có lỗi xảy ra khi cập nhật yêu cầu: ${xhr.responseText}`);
+                }
+              });
+  
+              // Log data for debugging
+              console.log("MaNV_Cookie:", MaNV_Cookie);
+              console.log("ID yêu cầu cập nhật:", requestId);
+              console.log("NgayRequest:", NgayRequest);
+              console.log("Sending data:", {
+                  MaNV: MaNV,
+                  ID: requestId,
+                  TrangThai: status,
+                  NgayDuyet: today, // Ensure the date is correct
+                  NgayRequest: NgayRequest,
+                  IDNguoiDuyet: MaNV_Cookie
+              });
+              console.log("Trạng thái:", status);
           }
-
-            // Gọi hàm để nạp dữ liệu khi trang được tải
+  
+          // Attach event handlers for the buttons
+          $(document).on('click', '.btn-reject', function() {
+              const requestId = $(this).data('id');
+              const MaNV = $(this).data('nv');
+              const NgayRequest = $(this).data('ngay');
+              handleWFHRequest(requestId, 'Từ chối', MaNV, NgayRequest);
+          });
+  
+          $(document).on('click', '.btn-outline-success', function() {
+              const requestId = $(this).data('id');
+              const MaNV = $(this).data('nv');
+              const NgayRequest = $(this).data('ngay');
+              handleWFHRequest(requestId, 'Chấp nhận', MaNV, NgayRequest);
+          });
+  
+          // Call function to load data when the page is loaded
           fetchTimesheetData();
-        });
-    </script>
-
+      }
+  });
+  
+  
+    
+  </script>
 </body>
 </html>

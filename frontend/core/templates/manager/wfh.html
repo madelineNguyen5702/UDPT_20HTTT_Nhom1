@@ -55,56 +55,116 @@
     <script>
       $(document).ready(function () {
         function getCookie(name) {
-          let value = "; " + document.cookie;
-          let parts = value.split("; " + name + "=");
-          if (parts.length === 2) return parts.pop().split(";").shift();
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
         }
 
-        const MaNV = getCookie("MaNV");
+        const MaNV_Cookie = getCookie("MaNV");
 
-        if (MaNV) {
-          function fetchWfhRequests() {
-            $.ajax({
-              url: "http://localhost:8000/WFHManagement/getRequestWFHManager/",
-              type: "POST",
-              contentType: "application/json; charset=utf-8",
-              dataType: "json",
-              data: JSON.stringify({ MaNV: MaNV }),
-              success: function (data) {
-                if (Array.isArray(data) && data.length > 0) {
-                  $("#wfh-requests").empty(); // Clear previous content
-                  data.forEach(request => {
-                    let requestHTML = `
-                      <div class="col-md-4">
-                        <div class="info-box">
-                          <p><strong>NV:</strong> ${request.MaNV}</p>
-                          <p><strong>Ngày yêu cầu:</strong> ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
-                          <div class="separator"></div>
-                          <div class="d-flex justify-content-between">
-                            <button class="btn btn-reject" data-id="${request.id}">Từ chối</button>
-                            <button class="btn btn-outline-success" data-id="${request.id}">Chấp thuận</button>
-                          </div>
-                        </div>
-                      </div>
-                    `;
-                    $("#wfh-requests").append(requestHTML);
-                  });
-                } else {
-                  $("#wfh-requests").append('<p>Không có yêu cầu WFH nào được tìm thấy.</p>');
-                }
-              },
-              error: function (xhr, status, error) {
-                console.error('Lỗi khi gọi API:', status, error);
-                $("#wfh-requests").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
-              }
-            });
-          }
+        if (MaNV_Cookie) {
+            function fetchWfhRequests() {
+                $.ajax({
+                    url: "http://localhost:8000/WFHManagement/getRequestWFHManager/",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ MaNV: MaNV_Cookie }),
+                    success: function (data) {
+                        if (Array.isArray(data) && data.length > 0) {
+                            $("#wfh-requests").empty();
+                            data.forEach(request => {
+                                let requestHTML = `
+                                    <div class="col-md-4">
+                                        <div class="info-box" data-manv="${request.MaNV}" data-ngayrequest="${request.NgayRequest}">
+                                            <p><strong>MaNV:</strong> ${request.MaNV}</p>
+                                            <p><strong>Ngày yêu cầu:</strong> ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
+                                            <div class="separator"></div>
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-reject" data-id="${request.id}">Từ chối</button>
+                                                <button class="btn btn-outline-success" data-id="${request.id}">Chấp thuận</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                $("#wfh-requests").append(requestHTML);
+                            });
 
-          fetchWfhRequests();
+                            // Attach event handlers for buttons
+                            $(".btn-reject").on("click", function () {
+                                let requestId = $(this).data("id");
+                                let requestMaNV = $(this).closest(".info-box").data("manv");
+                                let requestNgayRequest = $(this).closest(".info-box").data("ngayrequest");
+                                handleWFHRequest(requestId, "Từ chối", requestMaNV, requestNgayRequest);
+                            });
+
+                            $(".btn-outline-success").on("click", function () {
+                                let requestId = $(this).data("id");
+                                let requestMaNV = $(this).closest(".info-box").data("manv");
+                                let requestNgayRequest = $(this).closest(".info-box").data("ngayrequest");
+                                handleWFHRequest(requestId, "Chấp thuận", requestMaNV, requestNgayRequest);
+                            });
+
+                        } else {
+                            $("#wfh-requests").append('<p>Không có yêu cầu nghỉ phép nào được tìm thấy.</p>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Lỗi khi gọi API:', status, error);
+                        $("#wfh-requests").append(`<p>Đã xảy ra lỗi khi tải dữ liệu: ${xhr.responseText}</p>`);
+                    }
+                });
+            }
+
+            function handleWFHRequest(requestId, status, MaNV, NgayRequest) {
+                const today = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+                console.log("NgayDuyet (client-side):", today); // Log the date
+                
+                $.ajax({
+                    url: "http://localhost:8000/WFHManagement/handleRequestWFHManager/",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        MaNV: MaNV,
+                        ID: requestId,
+                        TrangThai: status,
+                        NgayDuyet: today, // Send current date
+                        NgayRequest: NgayRequest,
+                        IDNguoiDuyet: MaNV_Cookie
+                    }),
+                    success: function (response) {
+                        alert(`Yêu cầu đã được ${status.toLowerCase()} thành công.`);
+                        fetchWfhRequests(); // Refresh the list
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Lỗi khi cập nhật yêu cầu:', status, error);
+                        alert(`Có lỗi xảy ra khi cập nhật yêu cầu: ${xhr.responseText}`);
+                    }
+                });
+            
+                // Log data for debugging
+                console.log("MaNV từ cookie:", MaNV_Cookie);
+                console.log("MaNV từ nút bấm:", MaNV);
+                console.log("ID yêu cầu nghỉ phép:", requestId);
+                console.log("NgayRequest:", NgayRequest);
+                console.log("Sending data:", {
+                    MaNV: MaNV,
+                    ID: requestId,
+                    TrangThai: status,
+                    NgayDuyet: today, // Ensure the date is correct
+                    NgayRequest: NgayRequest,
+                    IDNguoiDuyet: MaNV_Cookie
+                });
+                console.log("Trạng thái:", status);
+            }
+            
+
+            fetchWfhRequests();
         } else {
-          $("#wfh-requests").append("<p>Không tìm thấy mã nhân viên trong cookie.</p>");
+            $("#wfh-requests").append("<p>Không tìm thấy mã nhân viên trong cookie.</p>");
         }
-      });
+    });
     </script>
   </body>
 </html>

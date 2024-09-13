@@ -55,24 +55,24 @@
                 let parts = value.split("; " + name + "=");
                 if (parts.length === 2) return parts.pop().split(";").shift();
             }
-            
-            const MaNV = getCookie("MaNV");
-        
-            if (MaNV) {
+    
+            const MaNV_Cookie = getCookie("MaNV");
+    
+            if (MaNV_Cookie) {
                 function fetchLeaveRequests() {
                     $.ajax({
                         url: "http://localhost:8000/leaveManagement/getRequestLeaveManager/",
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
-                        data: JSON.stringify({ MaNV: MaNV }), // Đổi tên trường từ IDNguoiDuyet thành MaNV
+                        data: JSON.stringify({ MaNV: MaNV_Cookie }),
                         success: function (data) {
                             if (Array.isArray(data) && data.length > 0) {
-                                $("#leave-requests").empty(); // Clear previous content
+                                $("#leave-requests").empty();
                                 data.forEach(request => {
                                     let requestHTML = `
                                         <div class="col-md-4">
-                                            <div class="info-box">
+                                            <div class="info-box" data-manv="${request.MaNV}" data-ngayrequest="${request.NgayRequest}">
                                                 <p><strong>MaNV:</strong> ${request.MaNV}</p>
                                                 <p><strong>Ngày yêu cầu:</strong> ${new Date(request.NgayRequest).toLocaleDateString('vi-VN')}</p>
                                                 <div class="separator"></div>
@@ -85,6 +85,22 @@
                                     `;
                                     $("#leave-requests").append(requestHTML);
                                 });
+    
+                                // Attach event handlers for buttons
+                                $(".btn-reject").on("click", function () {
+                                    let requestId = $(this).data("id");
+                                    let requestMaNV = $(this).closest(".info-box").data("manv");
+                                    let requestNgayRequest = $(this).closest(".info-box").data("ngayrequest");
+                                    handleLeaveRequest(requestId, "Từ chối", requestMaNV, requestNgayRequest);
+                                });
+    
+                                $(".btn-outline-success").on("click", function () {
+                                    let requestId = $(this).data("id");
+                                    let requestMaNV = $(this).closest(".info-box").data("manv");
+                                    let requestNgayRequest = $(this).closest(".info-box").data("ngayrequest");
+                                    handleLeaveRequest(requestId, "Chấp thuận", requestMaNV, requestNgayRequest);
+                                });
+    
                             } else {
                                 $("#leave-requests").append('<p>Không có yêu cầu nghỉ phép nào được tìm thấy.</p>');
                             }
@@ -95,12 +111,61 @@
                         }
                     });
                 }
-        
+    
+                function handleLeaveRequest(requestId, status, MaNV, NgayRequest) {
+                    const today = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+                    console.log("NgayDuyet (client-side):", today); // Log the date
+                    
+                    $.ajax({
+                        url: "http://localhost:8000/leaveManagement/handleRequestLeaveManager/",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: JSON.stringify({
+                            MaNV: MaNV,
+                            ID: requestId,
+                            TrangThai: status,
+                            NgayDuyet: today, // Send current date
+                            NgayRequest: NgayRequest,
+                            IDNguoiDuyet: MaNV_Cookie
+                        }),
+                        success: function (response) {
+                            alert(`Yêu cầu đã được ${status.toLowerCase()} thành công.`);
+                            fetchLeaveRequests(); // Refresh the list
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Lỗi khi cập nhật yêu cầu:', status, error);
+                            alert(`Có lỗi xảy ra khi cập nhật yêu cầu: ${xhr.responseText}`);
+                        }
+                    });
+                
+                    // Log data for debugging
+                    console.log("MaNV từ cookie:", MaNV_Cookie);
+                    console.log("MaNV từ nút bấm:", MaNV);
+                    console.log("ID yêu cầu nghỉ phép:", requestId);
+                    console.log("NgayRequest:", NgayRequest);
+                    console.log("Sending data:", {
+                        MaNV: MaNV,
+                        ID: requestId,
+                        TrangThai: status,
+                        NgayDuyet: today, // Ensure the date is correct
+                        NgayRequest: NgayRequest,
+                        IDNguoiDuyet: MaNV_Cookie
+                    });
+                    console.log("Trạng thái:", status);
+                }
+                
+    
                 fetchLeaveRequests();
             } else {
                 $("#leave-requests").append("<p>Không tìm thấy mã nhân viên trong cookie.</p>");
             }
         });
+    </script>
+    
+        
+        
+        
         
         
         
@@ -109,3 +174,19 @@
     </script>
 </body>
 </html>
+
+
+{% comment %} 
+// Properly log data outside the $.ajax call
+console.log("MaNV from button:", MaNV);
+console.log("ID yêu cầu nghỉ phép:", requestId);
+console.log("Sending data:", {
+    MaNV: MaNV,
+    ID: requestId,
+    TrangThai: status,
+    NgayDuyet: new Date().toISOString().slice(0, 10)
+});
+console.log("Trạng thái:", status);
+console.log('ID yêu cầu nghỉ phép:', requestId);
+console.log('MaNV yêu cầu nghỉ phép:', MaNV); 
+                    {% endcomment %}
