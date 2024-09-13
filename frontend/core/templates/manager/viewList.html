@@ -11,6 +11,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <header>
@@ -24,8 +25,9 @@
 
     <div class="container mt-4">
       <!-- Form Tìm Kiếm -->
-      <form class="d-flex mb-4" role="search">
+      <form id="search-form" class="d-flex mb-4" role="search">
         <input
+          id="search-input"
           class="form-control custom-search me-2"
           type="search"
           placeholder="Search"
@@ -43,38 +45,73 @@
 </html>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    // Hàm lấy giá trị từ cookie
+    function getCookie(name) {
+      let value = "; " + document.cookie;
+      let parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
 
-      const MaQL = "{{ request.session.MaNV }}";  
+    const MaQL = getCookie("MaNV");
 
-      // Tạo yêu cầu POST gửi MaQL đến API của EmployeeService
-      fetch("http://localhost:8004/api/managerViewList", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
+    let allEmployees = []; // Lưu danh sách tất cả nhân viên
+
+    function loadEmployees() {
+      if (MaQL) {
+        // Tạo yêu cầu POST gửi MaQL đến API của EmployeeService
+        $.ajax({
+          url: "http://localhost:8000/managerViewList/get_employees_by_manager/",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ MaQL: MaQL }),
+          success: function(data) {
+              allEmployees = data; // Lưu tất cả nhân viên vào biến toàn cục
+              displayEmployees(allEmployees); // Hiển thị danh sách nhân viên
           },
-          body: JSON.stringify({
-              MaQL: MaQL
-          })
-      })
-      .then(response => response.json())
-      .then(data => {
-          const employeeListDiv = document.getElementById("employee-list");
-
-          data.forEach(employee => {
-            const ul = document.createElement('ul');
-            ul.classList.add('list-group', 'list-group-horizontal');
-
-            ul.innerHTML = `
-                <li class="list-group-item">${employee.MaNV}</li>
-                <li class="list-group-item">${employee.HoTen}</li>
-                <li class="list-group-item">${employee.GioiTinh}</li>
-            `;
-
-            employeeList.appendChild(ul);
+          error: function(xhr, status, error) {
+              console.error("Error fetching employee list:", error);
+          }
         });
-      })
-      .catch(error => {
-          console.error("Error fetching employee list:", error);
+      }
+    }
+
+    function displayEmployees(employees) {
+      const employeeListDiv = document.getElementById("employee-list");
+
+      // Xóa danh sách nhân viên cũ nếu có
+      employeeListDiv.innerHTML = '';
+
+      employees.forEach(employee => {
+        const ul = document.createElement('ul');
+        ul.classList.add('list-group', 'list-group-horizontal');
+
+        ul.innerHTML = `
+            <li class="list-group-item">${employee.MaNV}</li>
+            <li class="list-group-item">${employee.HoTen}</li>
+            <li class="list-group-item">${employee.GioiTinh}</li>
+        `;
+
+        employeeListDiv.appendChild(ul);
       });
+    }
+
+    function searchEmployees(searchTerm) {
+      const filteredEmployees = allEmployees.filter(employee => 
+        employee.MaNV.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.HoTen.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.GioiTinh.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      displayEmployees(filteredEmployees);
+    }
+
+    // Load initial employees
+    loadEmployees();
+
+    // Tạo sự kiện tìm kiếm
+    document.getElementById("search-form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Ngăn chặn hành động mặc định của form
+      const searchTerm = document.getElementById("search-input").value.trim();
+      searchEmployees(searchTerm); // Gọi hàm để tìm kiếm và hiển thị kết quả
+    });
   });
 </script>
