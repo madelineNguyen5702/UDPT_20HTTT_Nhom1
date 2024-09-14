@@ -77,6 +77,45 @@ class EmployeeInfo(viewsets.ViewSet):
         except NhanVien.DoesNotExist:
             return Response({'error': 'No employees found'}, status=status.HTTP_404_NOT_FOUND)
 
+# class EmployeeActivity(viewsets.ViewSet):
+#     @action(detail=False, methods=['post'], url_path='getEmployeeActivity')
+#     def getEmployeeActivity(self, request):
+#         ma_nv = request.data.get('MaNV')
+#         print(f"Received MaNV: {ma_nv}")  # Debugging: print MaNV to check if it's being received correctly
+#         if not ma_nv:
+#             return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         # Lấy thông tin từ bảng StravaCredentials
+#         try:
+#             credentials = HoatDongNhanVien.objects.get(MaNV=ma_nv)
+#             # print(f"Retrieved token: {credentials.refresh_token}")  # Debugging: print token to check its value
+#         except HoatDongNhanVien.DoesNotExist:
+#             return Response({'error': 'Credentials not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+#         # Lấy access token từ refresh token
+#         try:
+#             access_token = credentials.access_token
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         # Gọi Strava API để lấy hoạt động
+#         url = "https://www.strava.com/api/v3/athlete/activities"
+#         headers = {
+#             "Authorization": f"Bearer {access_token}"  # Sử dụng access_token thay vì refresh_token
+#         }
+
+#         try:
+#             response = requests.get(url, headers=headers)
+#             response.raise_for_status()  # Raise an exception for HTTP errors
+#             data = response.json()
+#             return Response(data)
+#         except requests.exceptions.HTTPError as http_err:
+#             print(f"HTTP error occurred: {http_err}")
+#             return Response({'error': f'HTTP error occurred: {http_err}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#         except requests.exceptions.RequestException as req_err:
+#             print(f"Error occurred: {req_err}")
+#             return Response({'error': f'Error occurred: {req_err}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class EmployeeActivity(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='getEmployeeActivity')
     def getEmployeeActivity(self, request):
@@ -84,24 +123,46 @@ class EmployeeActivity(viewsets.ViewSet):
         print(f"Received MaNV: {ma_nv}")  # Debugging: print MaNV to check if it's being received correctly
         if not ma_nv:
             return Response({'error': 'MaNV is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         # Lấy thông tin từ bảng StravaCredentials
         try:
             credentials = HoatDongNhanVien.objects.get(MaNV=ma_nv)
-            print(f"Retrieved token: {credentials.refresh_token}")  # Debugging: print token to check its value
+            print(f"Retrieved credentials: refresh_token={credentials.refresh_token}, client_id={credentials.client_id}")  # Debugging
         except HoatDongNhanVien.DoesNotExist:
             return Response({'error': 'Credentials not found'}, status=status.HTTP_404_NOT_FOUND)
         
         # Lấy access token từ refresh token
-        try:
-            access_token = credentials.access_token
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        token_url = "https://www.strava.com/oauth/token"
+        payload = {
+            'client_id': credentials.client_id,
+            'client_secret': credentials.client_secret,
+            'refresh_token': credentials.refresh_token,
+            'grant_type': 'refresh_token'
+        }
 
-        # Gọi Strava API để lấy hoạt động
+        try:
+            # Request new access token
+            token_response = requests.post(token_url, data=payload)
+            token_response.raise_for_status()  # Raise an error if status is not 200
+            token_data = token_response.json()
+
+            new_access_token = token_data['access_token']
+            new_refresh_token = token_data.get('refresh_token', credentials.refresh_token)  # Sometimes refresh_token is updated
+
+            # Update access_token and refresh_token in the database
+            credentials.access_token = new_access_token
+            credentials.refresh_token = new_refresh_token
+            credentials.save()
+
+            print(f"Updated access_token: {new_access_token}")  # Debugging
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to refresh token: {e}")  # Debugging
+            return Response({'error': f"Failed to refresh token: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # Gọi Strava API để lấy hoạt động sử dụng access_token mới
         url = "https://www.strava.com/api/v3/athlete/activities"
         headers = {
-            "Authorization": f"Bearer {access_token}"  # Sử dụng access_token thay vì refresh_token
+            "Authorization": f"Bearer {new_access_token}"  # Sử dụng access_token mới
         }
 
         try:
@@ -115,5 +176,3 @@ class EmployeeActivity(viewsets.ViewSet):
         except requests.exceptions.RequestException as req_err:
             print(f"Error occurred: {req_err}")
             return Response({'error': f'Error occurred: {req_err}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
